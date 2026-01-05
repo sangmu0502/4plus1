@@ -21,7 +21,13 @@ public enum ErrorCode {
     USER_ACCESS_DENIED(HttpStatus.FORBIDDEN, "권한이 없습니다."),
 
     // Search 관련 ErrorCode
-    EMPTY_QUERY(HttpStatus.BAD_REQUEST, "검색어를 입력해주세요.");
+    EMPTY_QUERY(HttpStatus.BAD_REQUEST, "검색어를 입력해주세요."),
+
+    // 토큰 관련 ErrorCode
+    INVALID_TOKEN(HttpStatus.UNAUTHORIZED, "유효하지 않은 토큰입니다."),
+
+    // 로그인 관련 ErrorCode
+    LOGIN_FAIL(HttpStatus.UNAUTHORIZED, "아이디나 비밀번호가 일치하지 않습니다.");
 
     private final HttpStatus status;
     private final String message;
