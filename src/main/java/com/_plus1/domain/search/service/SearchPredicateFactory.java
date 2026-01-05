@@ -3,7 +3,7 @@ package com._plus1.domain.search.service;
 import com._plus1.common.entity.QAlbum;
 import com._plus1.common.entity.QArtist;
 import com._plus1.common.entity.QSong;
-import com._plus1.common.entity.QSongArtist;
+
 
 import com.querydsl.core.BooleanBuilder;
 import org.springframework.stereotype.Component;

@@ -5,6 +5,7 @@ import com._plus1.common.dto.CommonResponse;
 import com._plus1.domain.search.model.dto.PopularKeywordDto;
 import com._plus1.domain.search.model.dto.SearchSort;
 import com._plus1.domain.search.model.dto.response.SearchResponse;
+import com._plus1.domain.search.service.SearchCacheEvictService;
 import com._plus1.domain.search.service.SearchService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +24,8 @@ import java.util.List;
 public class SearchController {
 
     private final SearchService searchService;
+    private final SearchCacheEvictService searchCacheEvictService;
+
     @GetMapping
     public ResponseEntity<CommonResponse<SearchResponse>> search(
             @RequestParam("q") String q,
@@ -56,5 +59,11 @@ public class SearchController {
     ) {
         List<PopularKeywordDto> data = searchService.popular(limit);
         return ResponseEntity.ok(CommonResponse.success(data, "ok"));
+    }
+
+    @GetMapping("/clear")
+    public ResponseEntity<CommonResponse<Void>> clearAll(){
+        searchCacheEvictService.clearAll();
+        return ResponseEntity.ok().body(CommonResponse.success(null, "ok"));
     }
 }
