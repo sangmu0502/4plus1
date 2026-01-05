@@ -47,4 +47,23 @@ public class LikeService {
                 LikeDto.from(savedLike)
         );
     }
+
+    // 좋아요 삭제
+    @Transactional
+    public void deleteLike(Long songId) {
+
+        // 로그인 유저 조회
+        User user = userService.getCurrentUser();
+
+        // 노래 조회
+        Song song = songRepository.findById(songId)
+                .orElseThrow(() -> new CustomException(ErrorCode.SONG_NOT_FOUND));
+
+        // 좋아요 조회
+        Like like = likeRepository.findByUserAndSong(user, song)
+                .orElseThrow(() -> new CustomException(ErrorCode.LIKE_NOT_FOUND));
+
+        // 삭제
+        likeRepository.delete(like);
+    }
 }

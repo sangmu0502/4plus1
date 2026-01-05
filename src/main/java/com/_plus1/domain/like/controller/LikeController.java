@@ -26,4 +26,17 @@ public class LikeController {
                 .status(HttpStatus.OK)
                 .body(CommonResponse.success(response, "좋아요 생성 성공했습니다."));
     }
+
+
+    // 좋아요 삭제 api
+    @DeleteMapping("/{songId}")
+    public ResponseEntity<CommonResponse<Void>> deleteLike(
+            @PathVariable Long songId
+    ) {
+        likeService.deleteLike(songId);
+
+        return ResponseEntity.ok(
+                CommonResponse.success(null, "좋아요 삭제 성공했습니다.")
+        );
+    }
 }
