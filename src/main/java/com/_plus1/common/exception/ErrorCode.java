@@ -21,7 +21,10 @@ public enum ErrorCode {
     USER_ACCESS_DENIED(HttpStatus.FORBIDDEN, "권한이 없습니다."),
 
     // Search 관련 ErrorCode
-    EMPTY_QUERY(HttpStatus.BAD_REQUEST, "검색어를 입력해주세요.");
+    EMPTY_QUERY(HttpStatus.BAD_REQUEST, "검색어를 입력해주세요."),
+
+    // Album 관련 ErrorCode
+    ALBUM_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 ID의 앨범을 찾을 수 없습니다.");
 
     private final HttpStatus status;
     private final String message;
