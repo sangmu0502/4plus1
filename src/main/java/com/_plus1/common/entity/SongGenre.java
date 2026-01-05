@@ -5,7 +5,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "song_genre")
+@Table(name = "song_genre",
+        uniqueConstraints = {@UniqueConstraint(name="uk_song_genre_id",
+                columnNames = {"song_id","genre_id"})})
 @Getter
 @NoArgsConstructor
 public class SongGenre {

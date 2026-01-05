@@ -12,24 +12,27 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class Album extends BaseEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(name="album_id", nullable=false)
+    private Long externalId;
+
+    @Column(nullable = false, length = 1000)
     private String title;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private LocalDate releaseDate;
 
-    // QueryDsl 사용시 Fetch 필요한지 생각하기
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "artist_id", nullable = false)
-    private Artist artist;
-
-    public Album(String title, LocalDate releaseDate, Artist artist) {
+    public Album(String title, LocalDate releaseDate) {
         this.title = title;
         this.releaseDate = releaseDate;
-        this.artist = artist;
+    }
+
+    // 2. Album : Album album = new Album(externalId, title, releaseDate, artistReference);
+    public Album(Long externalId, String title, LocalDate releaseDate){
+        this.externalId = externalId;
+        this.title = title;
+        this.releaseDate = releaseDate;
     }
 }

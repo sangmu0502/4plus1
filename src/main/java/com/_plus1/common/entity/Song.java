@@ -16,14 +16,17 @@ public class Song extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(name="song_id",nullable = false)
+    private Long externalId;
+
+    @Column(nullable = false, length = 1000)
     private String title;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private LocalDate releaseDate;
 
     @Column(nullable = false)
-    private Long playCount;
+    private long playCount=0L;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "album_id")
@@ -34,5 +37,13 @@ public class Song extends BaseEntity {
         this.releaseDate = releaseDate;
         this.playCount = playCount;
         this.album = album;
+    }
+
+    // 4. Song : Song song = new Song(externalId, title, releaseDate, albumReference);
+    public Song(Long externalId, String title, LocalDate releaseDate, Album albumReference){
+        this.externalId = externalId;
+        this.title = title;
+        this.releaseDate = releaseDate;
+        this.album = albumReference;
     }
 }

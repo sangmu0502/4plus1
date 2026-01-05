@@ -14,6 +14,9 @@ public class Genre {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name="genre_id", nullable=false)
+    private Long externalId;
+
     @Column(nullable = false)
     private String genreCode;
 
@@ -23,5 +26,12 @@ public class Genre {
     public Genre (String genreCode, String genreName) {
         this.genreCode = genreCode;
         this.genreName = genreName;
+    }
+
+    // 3. Genre : Genre genre = new Genre(externalId, code, name);
+    public Genre(Long externalId, String code, String name){
+        this.externalId = externalId;
+        this.genreCode = code;
+        this.genreName = name;
     }
 }
