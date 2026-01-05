@@ -4,8 +4,10 @@ import com._plus1.common.entity.User;
 import com._plus1.common.exception.CustomException;
 import com._plus1.common.exception.ErrorCode;
 import com._plus1.domain.user.dto.request.UserSignupRequest;
+import com._plus1.domain.user.dto.request.UserUpdateRequest;
 import com._plus1.domain.user.dto.response.UserGetProfileResponse;
 import com._plus1.domain.user.dto.response.UserSignupResponse;
+import com._plus1.domain.user.dto.response.UserUpdateProfileResponse;
 import com._plus1.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +22,15 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+
+    // 작성자 : 이상무
+    // 유저 정보가 필요해서 임시로 불러올 유저 메서드 생성
+    @Transactional(readOnly = true)
+    public User getCurrentUser() {
+        return userRepository.findById(1L)
+                .orElseThrow(() -> new IllegalStateException("더미 유저가 존재하지 않습니다."));
+    }
+
 
     // 회원가입
     @Transactional
@@ -70,6 +81,33 @@ public class UserService {
                 user.getEmail(),
                 user.getPhoneNumber(),
                 user.getCreatedAt()
+        );
+    }
+
+    // 사용자 프로필 수정 로직
+    @Transactional
+    public UserUpdateProfileResponse updateProfile(Long userId, UserUpdateRequest request) {
+
+        // 유저 조회
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        // 프로필 수정
+        user.update(
+                request.getUserName(),
+                request.getEmail(),
+                request.getNickname(),
+                request.getPhoneNumber()
+        );
+
+        return new UserUpdateProfileResponse(
+                user.getId(),
+                user.getUsername(),
+                user.getNickname(),
+                user.getEmail(),
+                user.getPhoneNumber(),
+                user.getCreatedAt(),
+                user.getUpdatedAt()
         );
     }
 }

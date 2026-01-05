@@ -38,4 +38,12 @@ public class User extends BaseEntity {
         this.nickname = nickname;
         this.phoneNumber = phoneNumber;
     }
+
+    // 프로필 업데이트
+    public void update(String username, String email, String nickname, String phoneNumber) {
+        this.username = username;
+        this.email = email;
+        this.nickname = nickname;
+        this.phoneNumber = phoneNumber;
+    }
 }
