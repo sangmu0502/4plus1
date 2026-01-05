@@ -1,6 +1,5 @@
 package com._plus1.domain.like.model.response;
 
-import com._plus1.common.entity.Song;
 import com._plus1.domain.like.model.dto.LikeDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
