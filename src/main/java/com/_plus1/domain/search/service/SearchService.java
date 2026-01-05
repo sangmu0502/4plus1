@@ -5,7 +5,6 @@ import com._plus1.common.exception.ErrorCode;
 import com._plus1.domain.search.model.dto.PopularKeywordDto;
 import com._plus1.domain.search.model.dto.SearchSort;
 import com._plus1.domain.search.model.dto.response.SearchResponse;
-import com._plus1.domain.search.repository.SearchQueryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -18,7 +17,7 @@ import java.util.Locale;
 @Service
 @RequiredArgsConstructor
 public class SearchService {
-    private final SearchQueryRepository searchQueryRepository;
+
     private final PopularSearchService popularSearchService;
     private final SearchCachedService searchCachedService;
 
@@ -27,7 +26,7 @@ public class SearchService {
     private static final int MAX_PAGE_SIZE=100;
 
     // KEYWORD FROM TO SORT
-    // Upsert : popularSearchService.record(q);
+    // 1. NoCache
     public SearchResponse search(
             String query,
             LocalDate from,
@@ -49,7 +48,7 @@ public class SearchService {
         return searchCachedService.searchNoCache(q, from, to, sort, pageable);
     }
 
-
+    // 2. Cache
     public SearchResponse searchVersionTwo(
             String query,
             LocalDate from,
@@ -71,12 +70,13 @@ public class SearchService {
         return searchCachedService.searchCached(q, from, to, sort, pageable);
     }
 
+    // 기타 : popular
     public List<PopularKeywordDto> popular(int limit) {
         int n = Math.min(Math.max(limit, 1), 50);
         return popularSearchService.getTop(n);
     }
 
-
+    // 3. 쿼리 정규화
     private String normalizeQuery(String query){
         if(query==null||query.isBlank()){
             throw new CustomException(ErrorCode.EMPTY_QUERY);
@@ -85,17 +85,16 @@ public class SearchService {
         return query.trim().toLowerCase(Locale.ROOT);
     }
 
-
-
+    // 4. 페이지 정규화
     private Pageable of(Integer rawPage, Integer rawPageSize){
-        // 1. rawPage가 null, true : DEFAULT_PAGE=0(0Based) false : rawPage DEFAULT_PAGE 중 큰 값
-        // 1-1). page 음수 방지.
+        // 1). rawPage가 null, true : DEFAULT_PAGE=0(0Based) false : rawPage DEFAULT_PAGE 중 큰 값
+        // (1). page 음수 방지.
         int p=(rawPage==null)
                 ? DEFAULT_PAGE
                 : Math.max(rawPage, DEFAULT_PAGE);
 
 
-        // 2. rawPageSize null, 음수 방지.
+        // 2). rawPageSize null, 음수 방지.
         int s;
         if(rawPageSize==null||rawPageSize<=0){
             s=DEFAULT_PAGE_SIZE;
