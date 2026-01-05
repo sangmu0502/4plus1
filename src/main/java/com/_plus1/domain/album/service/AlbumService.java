@@ -3,6 +3,7 @@ package com._plus1.domain.album.service;
 import com._plus1.common.entity.Album;
 import com._plus1.common.entity.AlbumArtist;
 import com._plus1.common.entity.Song;
+import com._plus1.common.exception.CustomException;
 import com._plus1.domain.album.model.response.*;
 import com._plus1.domain.album.repository.*;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import static com._plus1.common.exception.ErrorCode.ALBUM_NOT_FOUND;
 
 @Service
 @Transactional
@@ -82,9 +85,9 @@ public class AlbumService {
         // 3번+6번 genreResponses ->  장르코드 + 장르명
         // 3번+4번+5번 songResponses -> songId + title + artists
 
-        // 1. 앨범 조회
+        // 1. 앨범 조회 + 예외 처리
         Album album = albumRepository.findById(albumId)
-                .orElseThrow(() -> new IllegalArgumentException("앨범이 존재하지 않습니다."));
+                .orElseThrow(() -> new CustomException(ALBUM_NOT_FOUND));
 
         // 2. 앨범 대표 가수 조회 (첫 번째 가수)
         List<AlbumArtist> albumArtists =

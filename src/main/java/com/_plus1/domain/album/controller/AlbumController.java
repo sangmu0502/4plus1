@@ -22,14 +22,14 @@ public class AlbumController {
     @GetMapping("/new")
     public ResponseEntity<CommonResponse<AlbumListResponse>> getNewAlbums() {
         AlbumListResponse result = albumService.getNewAlbums();
-        return ResponseEntity.ok().body(CommonResponse.success(result, "최신 앨범 10개 조회 성공"));
+        return ResponseEntity.ok().body(CommonResponse.success(result, "최신 앨범 조회를 성공하였습니다."));
     }
 
     // 앨범 상세 조회
     @GetMapping("/{albumId}")
     public ResponseEntity<CommonResponse<AlbumDetailsResponse>> getAlbumsDetails(@PathVariable Long albumId) {
         AlbumDetailsResponse result = albumService.getAlbumDetails(albumId);
-        return ResponseEntity.ok().body(CommonResponse.success(result, "앨범 상세 조회 성공"));
+        return ResponseEntity.ok().body(CommonResponse.success(result, "앨범 조회를 성공하였습니다."));
     }
 
 }
