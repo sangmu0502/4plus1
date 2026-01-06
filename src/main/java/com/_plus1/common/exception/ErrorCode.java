@@ -22,6 +22,11 @@ public enum ErrorCode {
     DUPLICATE_PHONE(HttpStatus.CONFLICT, "이미 등록된 연락처입니다."),
     USER_ACCESS_DENIED(HttpStatus.FORBIDDEN, "권한이 없습니다."),
 
+    // Playlist 관련 ErrorCode
+    PLAYLIST_NOT_FOUND(HttpStatus.NOT_FOUND, "플레이리스트가 존재하지 않습니다."),
+    DUPLICATE_SONG(HttpStatus.CONFLICT, "이미 추가된 노래입니다."),
+    PLAYLIST_SONG_NOT_FOUND(HttpStatus.BAD_REQUEST, "플레이리스트에 해당 노래가 존재하지 않습니다."),
+
     // Search 관련 ErrorCode
     EMPTY_QUERY(HttpStatus.BAD_REQUEST, "검색어를 입력해주세요."),
 
@@ -30,6 +35,9 @@ public enum ErrorCode {
     SONG_NOT_FOUND(HttpStatus.NOT_FOUND, "노래를 찾을 수 없습니다."),
     LIKE_NOT_FOUND(HttpStatus.NOT_FOUND, "좋아요를 찾을 수 없습니다."),
 
+    // 장르 관련 ErrorCode
+    INVALID_GENRE(HttpStatus.BAD_REQUEST, "유효한 장르명이 아닙니다."),
+  
     // Album 관련 ErrorCode
     ALBUM_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 ID의 앨범을 찾을 수 없습니다."),
 
