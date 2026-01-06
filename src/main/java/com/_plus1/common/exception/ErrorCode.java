@@ -29,7 +29,15 @@ public enum ErrorCode {
     PLAYLIST_SONG_NOT_FOUND(HttpStatus.BAD_REQUEST, "플레이리스트에 해당 노래가 존재하지 않습니다."),
 
     // Search 관련 ErrorCode
-    EMPTY_QUERY(HttpStatus.BAD_REQUEST, "검색어를 입력해주세요.");
+    EMPTY_QUERY(HttpStatus.BAD_REQUEST, "검색어를 입력해주세요."),
+
+    // Song 관련 ErrorCode
+    LIKE_ALREADY_EXISTS(HttpStatus.CONFLICT, "이미 좋아요를 누른 노래입니다."),
+    SONG_NOT_FOUND(HttpStatus.NOT_FOUND, "노래를 찾을 수 없습니다."),
+    LIKE_NOT_FOUND(HttpStatus.NOT_FOUND, "좋아요를 찾을 수 없습니다."),
+  
+    // Album 관련 ErrorCode
+    ALBUM_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 ID의 앨범을 찾을 수 없습니다.");
 
     private final HttpStatus status;
     private final String message;
