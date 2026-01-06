@@ -3,7 +3,9 @@ package com._plus1.domain.song.controller;
 import com._plus1.common.dto.CommonResponse;
 import com._plus1.common.dto.PageResponse;
 import com._plus1.domain.song.model.response.SongOfPopularResponse;
+import com._plus1.domain.song.model.response.SongLatestResponse;
 import com._plus1.domain.song.model.response.SongPlayResponse;
+import com._plus1.domain.song.model.response.SongTopTenResponse;
 import com._plus1.domain.song.service.SongService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -88,4 +90,34 @@ public class SongController {
                 .body(CommonResponse.success(pageResponse,"해외 장르 음악 조회 성공하였습니다."));
     }
 
+    @GetMapping("/top")
+    public ResponseEntity<CommonResponse<SongTopTenResponse>> getTopTenSongs() {
+
+        SongTopTenResponse response = songService.getTopTenSongs();
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(CommonResponse.success(response, "인기 음악 조회를 성공하였습니다."));
+    }
+
+    @GetMapping("/korea/new")
+    public ResponseEntity<CommonResponse<SongLatestResponse>> getLatestDomesticSongs() {
+
+        SongLatestResponse response = songService.getLatestDomesticSongs();
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(CommonResponse.success(response, "최신 국내 음악 조회를 성공하였습니다."));
+    }
+
+    @GetMapping("/global/new")
+    public ResponseEntity<CommonResponse<SongLatestResponse>> getLatestGlobalSongs() {
+
+        SongLatestResponse response =
+                songService.getLatestGlobalSongs();
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(CommonResponse.success(response, "최신 해외 음악 조회를 성공하였습니다"));
+    }
 }

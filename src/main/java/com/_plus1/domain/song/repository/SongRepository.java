@@ -45,4 +45,18 @@ public interface SongRepository extends JpaRepository<Song, Long> {
     )
     Page<Song> findKoreanPopularSongs (@Param("genreCodes") List<String> genreCodes, Pageable pageable);
 
+    List<Song> findTop10ByOrderByPlayCountDesc();
+
+    @Query("""
+        select distinct s
+        from Song s
+        join SongGenre sg on sg.song = s
+        join sg.genre g
+        where g.genreCode in :genreCodes
+        order by s.releaseDate desc
+    """)
+    List<Song> findLatestDomesticSongs(
+            @Param("genreCodes") List<String> genreCodes,
+            Pageable pageable
+    );
 }

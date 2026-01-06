@@ -26,4 +26,11 @@ public interface SongArtistRepository extends JpaRepository<SongArtist, Long> {
     """)
     List<SongArtist> findBySongIdInFetchSongAndArtist(@Param("songIds") List<Long> songIds);
 
+    @Query("""
+        select sa.song.id, sa.artist.name
+         from SongArtist sa
+        where sa.song.id in :songIds
+    """)
+    List<Object[]> findSongIdAndArtistNameBySongIds(@Param("songIds") List<Long> songIds);
+
 }
