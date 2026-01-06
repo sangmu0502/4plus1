@@ -66,7 +66,7 @@ public class UserService {
 
         User user = new User(
                 request.getEmail(),
-                request.getUserName(),
+                request.getUsername(),
                 encodedPassword,
                 request.getNickname(),
                 request.getPhoneNumber()
@@ -147,7 +147,7 @@ public class UserService {
                 .toList();
 
         // 아티스트 정보 한 번에 조회
-        List<SongArtist> songArtists = songArtistRepository.findBySongIdInFetchArtist(songIds);
+        List<SongArtist> songArtists = songArtistRepository.findBySongIdInFetchArtistOnly(songIds);
 
         // 조회를 위해 SongId별 아티스트 이름 리스트로 그룹화
         Map<Long, List<String>> songArtistsMap = songArtists.stream()
