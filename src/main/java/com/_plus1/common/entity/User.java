@@ -13,7 +13,7 @@ public class User extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String email;
 
     @Column(nullable = false)
@@ -22,21 +22,33 @@ public class User extends BaseEntity {
     @Column(nullable = false)
     private String password;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String nickname;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String phoneNumber;
 
     @Column(nullable = false)
     private boolean isDeleted = false;
 
-    public User(String email, String username, String password, String nickname, String phoneNumber, boolean isDeleted) {
+    public User(String email, String username, String password, String nickname, String phoneNumber) {
         this.email = email;
         this.username = username;
         this.password = password;
         this.nickname = nickname;
         this.phoneNumber = phoneNumber;
-        this.isDeleted = isDeleted;
+    }
+
+    // 프로필 업데이트
+    public void update(String username, String email, String nickname, String phoneNumber) {
+        this.username = username;
+        this.email = email;
+        this.nickname = nickname;
+        this.phoneNumber = phoneNumber;
+    }
+
+    // 소프트 딜리트
+    public void softDelete() {
+        this.isDeleted = true;
     }
 }
