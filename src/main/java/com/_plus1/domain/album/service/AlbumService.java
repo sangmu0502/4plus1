@@ -110,7 +110,7 @@ public class AlbumService {
 
         // 4. 곡 - 가수 조회
         Map<Long, List<String>> songArtistMap =
-                songArtistRepository.findBySongIdInFetchArtist(songIds)
+                songArtistRepository.findBySongIdInFetchArtistOnly(songIds)
                         .stream()
                         .collect(Collectors.groupingBy(
                                 sa -> sa.getSong().getId(),
