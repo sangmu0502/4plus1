@@ -9,4 +9,5 @@ public interface SongRepository extends JpaRepository<Song, Long> {
 
     List<Song> findByAlbumId(Long albumId);
 
+    List<Song> findTop10ByOrderByPlayCountDesc();
 }
