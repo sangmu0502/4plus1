@@ -2,9 +2,11 @@ package com._plus1.domain.user.service;
 
 import com._plus1.common.entity.Like;
 import com._plus1.common.entity.Song;
+import com._plus1.common.entity.SongArtist;
 import com._plus1.common.entity.User;
 import com._plus1.common.exception.CustomException;
 import com._plus1.common.exception.ErrorCode;
+import com._plus1.domain.album.repository.SongArtistRepository;
 import com._plus1.domain.like.repository.LikeRepository;
 import com._plus1.domain.user.dto.request.UserSignupRequest;
 import com._plus1.domain.user.dto.request.UserUpdateRequest;
@@ -19,8 +21,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -29,6 +32,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final LikeRepository likeRepository;
+    private final SongArtistRepository songArtistRepository;
     private final PasswordEncoder passwordEncoder;
 
     // 작성자 : 이상무
@@ -44,18 +48,25 @@ public class UserService {
     @Transactional
     public UserSignupResponse signup(UserSignupRequest request) {
 
-        // 이미 가입된 이메일인 경우 예외 발생
-        if (userRepository.existsByEmail(request.getEmail())) {
-            log.info("이미 가입된 이메일입니다. {}", ErrorCode.DUPLICATE_EMAIL);
+        // 이메일 중복 체크
+        if (userRepository.existsByEmailAndIsDeletedFalse(request.getEmail())) {
             throw new CustomException(ErrorCode.DUPLICATE_EMAIL);
+        }
+        // 아이디 중복 체크
+        if (userRepository.existsByNickname(request.getNickname())) {
+            throw new CustomException(ErrorCode.DUPLICATE_NICKNAME);
+        }
+        // 연락처 중복 체크
+        if (userRepository.existsByPhoneNumber(request.getPhoneNumber())) {
+            throw new CustomException(ErrorCode.DUPLICATE_PHONE);
         }
 
         // 비밀번호 암호화
         String encodedPassword = passwordEncoder.encode(request.getPassword());
 
         User user = new User(
-                request.getUserName(),
                 request.getEmail(),
+                request.getUserName(),
                 encodedPassword,
                 request.getNickname(),
                 request.getPhoneNumber()
@@ -79,7 +90,7 @@ public class UserService {
     public UserGetProfileResponse getProfile(String nickname) {
 
         // 로그인할 때 사용한 닉네임으로 유저 조회
-        User user = userRepository.findByNickname(nickname)
+        User user = userRepository.findByNicknameAndIsDeletedFalse(nickname)
                 .orElseThrow(()-> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         return new UserGetProfileResponse(
@@ -97,7 +108,7 @@ public class UserService {
     public UserUpdateProfileResponse updateProfile(Long userId, UserUpdateRequest request) {
 
         // 유저 조회
-        User user = userRepository.findById(userId)
+        User user = userRepository.findByIdAndIsDeletedFalse(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         // 프로필 수정
@@ -126,18 +137,30 @@ public class UserService {
         // 해당 유저가 좋아요한 목록 조회
         List<Like> likes = likeRepository.findAllByUserIdWithSongAndArtist(userId);
 
+        if (likes.isEmpty()) {
+            return new UserLikeSongsResponse(List.of());
+        }
+
+        // 좋아요한 음악 ID들만 추출
+        List<Long> songIds = likes.stream()
+                .map(like -> like.getSong().getId())
+                .toList();
+
+        // 아티스트 정보 한 번에 조회
+        List<SongArtist> songArtists = songArtistRepository.findBySongIdInFetchArtist(songIds);
+
+        // 조회를 위해 SongId별 아티스트 이름 리스트로 그룹화
+        Map<Long, List<String>> songArtistsMap = songArtists.stream()
+                .collect(Collectors.groupingBy(
+                        sa -> sa.getSong().getId(),
+                        Collectors.mapping(sa -> sa.getArtist().getName(), Collectors.toList())
+                ));
+
+        // Response
         List<UserLikeSongsResponse.LikeSongResponse> likeSongList = likes.stream()
                 .map(like -> {
                     Song song = like.getSong();
-
-                    if (song == null) {
-                        throw new CustomException(ErrorCode.SONG_NOT_FOUND);
-                    }
-
-                    // 아티스트 이름 추출
-                    List<String> artistNames = song.getSongArtists().stream()
-                            .map(songArtist -> songArtist.getArtist().getName())
-                            .toList();
+                    List<String> artistNames = songArtistsMap.getOrDefault(song.getId(), List.of());
 
                     return new UserLikeSongsResponse.LikeSongResponse(
                             song.getId(),
@@ -155,17 +178,19 @@ public class UserService {
     @Transactional
     public void userWithdraw(Long userId, UserWithdrawlRequest request, User loginUser) {
 
-        // 로그인한 유저와 탈퇴 대상이 일치하는지
+        // 로그인한 유저와 요청한 ID가 일치하는지 확인
         if (!userId.equals(loginUser.getId())) {
             throw new CustomException(ErrorCode.USER_ACCESS_DENIED);
         }
 
-        // 비밀번호 검증
-        if (!passwordEncoder.matches(request.getCurrentPassword(), loginUser.getPassword())) {
+        User user = userRepository.findByIdAndIsDeletedFalse(userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        // 비밀번호와 검증
+        if (!passwordEncoder.matches(request.getCurrentPassword(), user.getPassword())) {
             throw new CustomException(ErrorCode.INVALID_PASSWORD);
         }
 
-        // 회원 탈퇴
-        loginUser.softDelete();
+        user.softDelete();
     }
 }

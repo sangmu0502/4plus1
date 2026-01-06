@@ -34,10 +34,6 @@ public class Song extends BaseEntity {
     @JoinColumn(name = "album_id")
     private Album album;
 
-    // Song.java
-    @OneToMany(mappedBy = "song")
-    private List<SongArtist> songArtists = new ArrayList<>();
-
     public Song (String title, LocalDate releaseDate, Long playCount, Album album) {
         this.title = title;
         this.releaseDate = releaseDate;

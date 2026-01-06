@@ -16,12 +16,6 @@ public interface LikeRepository extends JpaRepository<Like, Long> {
 
     Optional<Like> findByUserAndSong(User user, Song song);
 
-    List<Like> findAllByUserId(Long userId);
-
-    @Query("select l from Like l " +
-            "join fetch l.song s " +
-            "join fetch s.songArtists sa " +
-            "join fetch sa.artist " +
-            "where l.user.id = :userId")
+    @Query("select l from Like l join fetch l.song s where l.user.id = :userId")
     List<Like> findAllByUserIdWithSongAndArtist(@Param("userId") Long userId);
 }

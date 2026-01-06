@@ -24,7 +24,7 @@ public class AuthService {
     public TokenResponse login(AuthLoginRequest request) {
 
         // 회원조회
-        User user = userRepository.findByNickname(request.getNickname())
+        User user = userRepository.findByNicknameAndIsDeletedFalse(request.getNickname())
                 .orElseThrow(()-> new CustomException(ErrorCode.LOGIN_FAIL));
 
         // 비밀번호 검증
