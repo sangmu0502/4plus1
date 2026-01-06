@@ -22,7 +22,7 @@ public class Song extends BaseEntity {
     @Column(nullable = false, length = 1000)
     private String title;
 
-    @Column(nullable = true)
+    @Column
     private LocalDate releaseDate;
 
     @Column(nullable = false)
@@ -45,5 +45,10 @@ public class Song extends BaseEntity {
         this.title = title;
         this.releaseDate = releaseDate;
         this.album = albumReference;
+    }
+
+    // PlayCount 증가 메서드 추가
+    public void increasePlayCount() {
+        this.playCount++;
     }
 }
