@@ -28,4 +28,10 @@ public class Playlist extends BaseEntity {
         this.description = description;
         this.user = user;
     }
+
+    public void update (String title, String description) {
+        this.title = title;
+        this.description = description;
+    }
+
 }
