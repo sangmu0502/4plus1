@@ -7,11 +7,12 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
 import jakarta.annotation.PostConstruct;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-
+import org.springframework.util.StringUtils;
 import javax.crypto.SecretKey;
 import java.util.Date;
 
@@ -83,9 +84,9 @@ public class JwtUtil {
     /**
      * 헤더에서 토큰 추출 (Bearer 제거)
      */
-    public String getJwtFromHeader(jakarta.servlet.http.HttpServletRequest request) {
+    public String getJwtFromHeader(HttpServletRequest request) {
         String bearerToken = request.getHeader("Authorization");
-        if (org.springframework.util.StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER_PREFIX)) {
+        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER_PREFIX)) {
             return bearerToken.substring(7); // "Bearer " 문자열 제외한 토큰만 반환
         }
         return null;
