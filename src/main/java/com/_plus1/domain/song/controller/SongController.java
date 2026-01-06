@@ -56,9 +56,6 @@ public class SongController {
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(CommonResponse.success(
-                        response,
-                        "최신 해외 음악 조회를 성공하였습니다"
-                ));
+                .body(CommonResponse.success(response, "최신 해외 음악 조회를 성공하였습니다"));
     }
 }
