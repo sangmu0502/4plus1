@@ -20,9 +20,6 @@ public enum ErrorCode {
     DUPLICATE_EMAIL(HttpStatus.CONFLICT, "이미 사용중인 이메일입니다."),
     USER_ACCESS_DENIED(HttpStatus.FORBIDDEN, "권한이 없습니다."),
 
-    // Song 관련 ErrorCode
-    SONG_NOT_FOUND(HttpStatus.NOT_FOUND, "노래가 존재하지 않습니다."),
-
     // Playlist 관련 ErrorCode
     PLAYLIST_NOT_FOUND(HttpStatus.NOT_FOUND, "플레이리스트가 존재하지 않습니다."),
     DUPLICATE_SONG(HttpStatus.CONFLICT, "이미 추가된 노래입니다."),
