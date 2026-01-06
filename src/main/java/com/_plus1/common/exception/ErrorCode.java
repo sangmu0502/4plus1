@@ -22,6 +22,7 @@ public enum ErrorCode {
 
     // Search 관련 ErrorCode
     EMPTY_QUERY(HttpStatus.BAD_REQUEST, "검색어를 입력해주세요."),
+    INVALID_DATE_RANGE(HttpStatus.BAD_REQUEST, "잘못된 날짜 범위입니다."),
 
     // Song 관련 ErrorCode
     LIKE_ALREADY_EXISTS(HttpStatus.CONFLICT, "이미 좋아요를 누른 노래입니다."),

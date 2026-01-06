@@ -1,6 +1,4 @@
-spring:
+app:
   cache:
-    type: caffeine
-    cache-names: search:songs,search:albums,search:artists
-    caffeine:
-      spec: maximumSize=10000,expireAfterWrite=200ms
+    maximum-size: 50000
+    expire-after-write-ms: 300000 # 5분.
