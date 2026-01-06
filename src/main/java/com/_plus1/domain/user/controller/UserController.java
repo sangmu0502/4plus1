@@ -5,6 +5,7 @@ import com._plus1.common.security.UserDetailsImpl;
 import com._plus1.domain.user.dto.request.UserSignupRequest;
 import com._plus1.domain.user.dto.request.UserUpdateRequest;
 import com._plus1.domain.user.dto.response.UserGetProfileResponse;
+import com._plus1.domain.user.dto.response.UserLikeSongsResponse;
 import com._plus1.domain.user.dto.response.UserSignupResponse;
 import com._plus1.domain.user.dto.response.UserUpdateProfileResponse;
 import com._plus1.domain.user.service.UserService;
@@ -44,10 +45,18 @@ public class UserController {
     @PutMapping("/profile")
     public ResponseEntity<CommonResponse<UserUpdateProfileResponse>> updateProfileApi(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody UserUpdateRequest updateRequest) {
 
-        // userDetails.getUser()를 통해 현재 로그인한 유저 엔티티를 서비스로 전달
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(CommonResponse.success( userService.updateProfile(userDetails.getUser().getId(), updateRequest), "사용자 프로필 조회가 완료되었습니다."));
+    }
+
+    // 사용자 좋아요 음악 조회
+    @GetMapping("/likes")
+    public ResponseEntity<CommonResponse<UserLikeSongsResponse>> getUserLikesSongsApi(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(CommonResponse.success(userService.getUserLikeSongs(userDetails.getUser().getId()), "사용자 좋아요 음악 조회가 완료되었습니다."));
     }
 
 }

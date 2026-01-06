@@ -1,11 +1,15 @@
 package com._plus1.domain.user.service;
 
+import com._plus1.common.entity.Like;
+import com._plus1.common.entity.Song;
 import com._plus1.common.entity.User;
 import com._plus1.common.exception.CustomException;
 import com._plus1.common.exception.ErrorCode;
+import com._plus1.domain.like.repository.LikeRepository;
 import com._plus1.domain.user.dto.request.UserSignupRequest;
 import com._plus1.domain.user.dto.request.UserUpdateRequest;
 import com._plus1.domain.user.dto.response.UserGetProfileResponse;
+import com._plus1.domain.user.dto.response.UserLikeSongsResponse;
 import com._plus1.domain.user.dto.response.UserSignupResponse;
 import com._plus1.domain.user.dto.response.UserUpdateProfileResponse;
 import com._plus1.domain.user.repository.UserRepository;
@@ -15,12 +19,15 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserService {
 
     private final UserRepository userRepository;
+    private final LikeRepository likeRepository;
     private final PasswordEncoder passwordEncoder;
 
     // 작성자 : 이상무
@@ -109,5 +116,37 @@ public class UserService {
                 user.getCreatedAt(),
                 user.getUpdatedAt()
         );
+    }
+
+    // 사용자 좋아요 음악 조회 로직
+    @Transactional(readOnly = true)
+    public UserLikeSongsResponse getUserLikeSongs(Long userId) {
+
+        // 해당 유저가 좋아요한 목록 조회
+        List<Like> likes = likeRepository.findAllByUserIdWithSongAndArtist(userId);
+
+        List<UserLikeSongsResponse.LikeSongResponse> likeSongList = likes.stream()
+                .map(like -> {
+                    Song song = like.getSong();
+
+                    if (song == null) {
+                        throw new CustomException(ErrorCode.SONG_NOT_FOUND);
+                    }
+
+                    // 아티스트 이름 추출
+                    List<String> artistNames = song.getSongArtists().stream()
+                            .map(songArtist -> songArtist.getArtist().getName())
+                            .toList();
+
+                    return new UserLikeSongsResponse.LikeSongResponse(
+                            song.getId(),
+                            like.getId(),
+                            song.getTitle(),
+                            artistNames
+                    );
+                })
+                .toList();
+
+        return new UserLikeSongsResponse(likeSongList);
     }
 }
