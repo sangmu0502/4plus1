@@ -8,6 +8,7 @@ import com._plus1.common.exception.ErrorCode;
 import com._plus1.domain.like.repository.LikeRepository;
 import com._plus1.domain.user.dto.request.UserSignupRequest;
 import com._plus1.domain.user.dto.request.UserUpdateRequest;
+import com._plus1.domain.user.dto.request.UserWithdrawlRequest;
 import com._plus1.domain.user.dto.response.UserGetProfileResponse;
 import com._plus1.domain.user.dto.response.UserLikeSongsResponse;
 import com._plus1.domain.user.dto.response.UserSignupResponse;
@@ -148,5 +149,23 @@ public class UserService {
                 .toList();
 
         return new UserLikeSongsResponse(likeSongList);
+    }
+
+    // 회원 탈퇴 로직
+    @Transactional
+    public void userWithdraw(Long userId, UserWithdrawlRequest request, User loginUser) {
+
+        // 로그인한 유저와 탈퇴 대상이 일치하는지
+        if (!userId.equals(loginUser.getId())) {
+            throw new CustomException(ErrorCode.USER_ACCESS_DENIED);
+        }
+
+        // 비밀번호 검증
+        if (!passwordEncoder.matches(request.getCurrentPassword(), loginUser.getPassword())) {
+            throw new CustomException(ErrorCode.INVALID_PASSWORD);
+        }
+
+        // 회원 탈퇴
+        loginUser.softDelete();
     }
 }

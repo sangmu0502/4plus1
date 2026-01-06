@@ -46,4 +46,9 @@ public class User extends BaseEntity {
         this.nickname = nickname;
         this.phoneNumber = phoneNumber;
     }
+
+    // 소프트 딜리트
+    public void softDelete() {
+        this.isDeleted = true;
+    }
 }

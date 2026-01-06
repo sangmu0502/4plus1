@@ -4,6 +4,7 @@ import com._plus1.common.dto.CommonResponse;
 import com._plus1.common.security.UserDetailsImpl;
 import com._plus1.domain.user.dto.request.UserSignupRequest;
 import com._plus1.domain.user.dto.request.UserUpdateRequest;
+import com._plus1.domain.user.dto.request.UserWithdrawlRequest;
 import com._plus1.domain.user.dto.response.UserGetProfileResponse;
 import com._plus1.domain.user.dto.response.UserLikeSongsResponse;
 import com._plus1.domain.user.dto.response.UserSignupResponse;
@@ -47,7 +48,7 @@ public class UserController {
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(CommonResponse.success( userService.updateProfile(userDetails.getUser().getId(), updateRequest), "사용자 프로필 조회가 완료되었습니다."));
+                .body(CommonResponse.success(userService.updateProfile(userDetails.getUser().getId(), updateRequest), "사용자 프로필 조회가 완료되었습니다."));
     }
 
     // 사용자 좋아요 음악 조회
@@ -59,4 +60,15 @@ public class UserController {
                 .body(CommonResponse.success(userService.getUserLikeSongs(userDetails.getUser().getId()), "사용자 좋아요 음악 조회가 완료되었습니다."));
     }
 
+    // 회원 탈퇴
+    @DeleteMapping("/withdraw")
+    public ResponseEntity<CommonResponse<Void>> withdraw(@RequestBody UserWithdrawlRequest request, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+
+        userService.userWithdraw(userDetails.getUser().getId(), request, userDetails.getUser());
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(CommonResponse.success(null, "회원 탈퇴가 완료되었습니다."));
+    }
 }
+
