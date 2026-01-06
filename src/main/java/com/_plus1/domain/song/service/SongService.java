@@ -39,22 +39,23 @@ public class SongService {
         return SongPlayResponse.from(SongDto.from(song));
     }
 
+    // 재생 횟수 기준 Top 10 노래 조회
     @Transactional(readOnly = true)
     public SongTopTenResponse getTopTenSongs() {
 
         List<Song> songs = songRepository.findTop10ByOrderByPlayCountDesc();
 
-        // 1. albumId 수집
+        // albumId 수집
         List<Long> albumIds = songs.stream()
                 .map(song -> song.getAlbum().getId())
                 .distinct()
                 .toList();
 
-        // 2. AlbumArtist 한방 조회
+        // AlbumArtist 조회
         List<AlbumArtist> albumArtists =
                 albumArtistRepository.findByAlbumIdIn(albumIds);
 
-        // 3. albumId -> artistName 리스트 매핑
+        // albumId -> artistName 리스트 매핑
         Map<Long, List<String>> albumArtistMap =
                 albumArtists.stream()
                         .collect(Collectors.groupingBy(
@@ -65,7 +66,7 @@ public class SongService {
                                 )
                         ));
 
-        // 4. response 생성
+        // response 생성
         List<SongTopTenItemResponse> results =
                 songs.stream()
                         .map(song -> {
