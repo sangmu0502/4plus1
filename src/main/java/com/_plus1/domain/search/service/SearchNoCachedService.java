@@ -1,34 +1,25 @@
 package com._plus1.domain.search.service;
 
-
-
 import com._plus1.domain.search.model.dto.cache.SearchKey;
 import com._plus1.domain.search.model.dto.response.SearchResponse;
 import com._plus1.domain.search.model.dto.response.SearchSliceResponse;
 import com._plus1.domain.search.repository.SearchQueryRepository;
 import lombok.RequiredArgsConstructor;
 
-import org.springframework.cache.annotation.Cacheable;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
-import java.time.LocalDate;
-
 // 0. Response
 @Service
 @RequiredArgsConstructor
-public class SearchCachedService {
+public class SearchNoCachedService {
 
     private final SearchQueryRepository searchQueryRepository;
 
     // 1. Page
-    @Cacheable(cacheNames="searchCached:paged",
-            key="#condition.toCache()",
-            condition="#condition.cacheable()")
     @Transactional(readOnly = true)
-    public SearchResponse searchCached(SearchKey condition) {
+    public SearchResponse searchNoCache(SearchKey condition) {
         return new SearchResponse(
                 condition.q(),
                 searchQueryRepository.searchSongs(condition),
@@ -38,11 +29,8 @@ public class SearchCachedService {
     }
 
     // 2. Slice
-    @Cacheable(cacheNames="searchCached:sliced",
-            key="#condition.toCache()",
-            condition="#condition.cacheable()")
     @Transactional(readOnly = true)
-    public SearchSliceResponse searchCachedSlice(SearchKey condition) {
+    public SearchSliceResponse searchSliceNoCache(SearchKey condition) {
         return new SearchSliceResponse(
                 condition.q(),
                 searchQueryRepository.searchSongsSlice(condition),
@@ -50,5 +38,4 @@ public class SearchCachedService {
                 searchQueryRepository.searchArtistsSlice(condition)
         );
     }
-
 }

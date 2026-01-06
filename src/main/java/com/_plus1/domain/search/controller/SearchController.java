@@ -5,6 +5,7 @@ import com._plus1.common.dto.CommonResponse;
 import com._plus1.domain.search.model.dto.PopularKeywordDto;
 import com._plus1.domain.search.model.dto.SearchSort;
 import com._plus1.domain.search.model.dto.response.SearchResponse;
+import com._plus1.domain.search.model.dto.response.SearchSliceResponse;
 import com._plus1.domain.search.service.SearchCacheEvictService;
 import com._plus1.domain.search.service.SearchService;
 import lombok.RequiredArgsConstructor;
@@ -40,7 +41,7 @@ public class SearchController {
     }
 
     // cache
-    @GetMapping("/ver2")
+    @GetMapping("/cache")
     public ResponseEntity<CommonResponse<SearchResponse>> searchVersionTwo(
             @RequestParam("q") String q,
             @RequestParam(value="from", required=false) LocalDate from,
@@ -50,6 +51,32 @@ public class SearchController {
             @RequestParam(value="size", defaultValue = "50") Integer size
     ){
         SearchResponse data = searchService.searchVersionTwo(q, from, to, sort, page, size);
+        return ResponseEntity.ok().body(CommonResponse.success(data, "ok"));
+    }
+
+    @GetMapping("/slice")
+    public ResponseEntity<CommonResponse<SearchSliceResponse>> searchVersionThree(
+            @RequestParam("q") String q,
+            @RequestParam(value="from", required=false) LocalDate from,
+            @RequestParam(value="to", required=false) LocalDate to,
+            @RequestParam(value="sort", required=false, defaultValue="LATEST") SearchSort sort,
+            @RequestParam(value="page", defaultValue = "0") Integer page,
+            @RequestParam(value="size", defaultValue = "50") Integer size
+    ){
+        SearchSliceResponse data = searchService.searchVersionThree(q, from, to, sort, page, size);
+        return ResponseEntity.ok().body(CommonResponse.success(data, "ok"));
+    }
+
+    @GetMapping("/slice/cache")
+    public ResponseEntity<CommonResponse<SearchSliceResponse>> searchVersionFour(
+            @RequestParam("q") String q,
+            @RequestParam(value="from", required=false) LocalDate from,
+            @RequestParam(value="to", required=false) LocalDate to,
+            @RequestParam(value="sort", required=false, defaultValue="LATEST") SearchSort sort,
+            @RequestParam(value="page", defaultValue = "0") Integer page,
+            @RequestParam(value="size", defaultValue = "50") Integer size
+    ){
+        SearchSliceResponse data = searchService.searchVersionFour(q, from, to, sort, page, size);
         return ResponseEntity.ok().body(CommonResponse.success(data, "ok"));
     }
 
