@@ -1,6 +1,7 @@
 package com._plus1.domain.song.controller;
 
 import com._plus1.common.dto.CommonResponse;
+import com._plus1.domain.song.model.response.SongLatestResponse;
 import com._plus1.domain.song.model.response.SongPlayResponse;
 import com._plus1.domain.song.model.response.SongTopTenResponse;
 import com._plus1.domain.song.service.SongService;
@@ -35,5 +36,29 @@ public class SongController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(CommonResponse.success(response, "인기 음악 조회를 성공하였습니다."));
+    }
+
+    @GetMapping("/korea/new")
+    public ResponseEntity<CommonResponse<SongLatestResponse>> getLatestDomesticSongs() {
+
+        SongLatestResponse response = songService.getLatestDomesticSongs();
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(CommonResponse.success(response, "최신 국내 음악 조회를 성공하였습니다."));
+    }
+
+    @GetMapping("/global/new")
+    public ResponseEntity<CommonResponse<SongLatestResponse>> getLatestGlobalSongs() {
+
+        SongLatestResponse response =
+                songService.getLatestGlobalSongs();
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(CommonResponse.success(
+                        response,
+                        "최신 해외 음악 조회를 성공하였습니다"
+                ));
     }
 }
