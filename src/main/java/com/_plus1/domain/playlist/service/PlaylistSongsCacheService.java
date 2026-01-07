@@ -20,13 +20,13 @@ public class PlaylistSongsCacheService {
 
     private static final String CACHE_PREFIX = "playlist:songs:firstpage:";
 
-    public String buildFirstPageKey(Long userId, Long playlistId, int size) {
+    public String buildFirstPageKey(Long playlistId, int size) {
 
-        return CACHE_PREFIX + "uid:" + userId + ":pid:" + playlistId + ":size:" + size;
+        return CACHE_PREFIX + "pid:" + playlistId + ":size:" + size;
     }
 
-    public Page<PlaylistSongItemResponse> getFirstPage(Long userId, Long playlistId, int size) {
-        String key = buildFirstPageKey(userId, playlistId, size);
+    public Page<PlaylistSongItemResponse> getFirstPage(Long playlistId, int size) {
+        String key = buildFirstPageKey(playlistId, size);
         Object cached = redisTemplate.opsForValue().get(key);
 
         if (cached == null) {
@@ -39,16 +39,16 @@ public class PlaylistSongsCacheService {
 
     }
 
-    public void saveFirstPage(Long userId, Long playlistId, int size, Page<PlaylistSongItemResponse> page) {
-        String key = buildFirstPageKey(userId, playlistId, size);
+    public void saveFirstPage(Long playlistId, int size, Page<PlaylistSongItemResponse> page) {
+        String key = buildFirstPageKey(playlistId, size);
 
         PlaylistSongsPageCache dto = new PlaylistSongsPageCache(new java.util.ArrayList<>(page.getContent()), page.getNumber(), page.getSize(), page.getTotalElements());
         redisTemplate.opsForValue().set(key, dto, 24, TimeUnit.HOURS);
 
     }
 
-    public void deleteFirstPage(Long userId, Long playlistId, int size) {
-        String key = buildFirstPageKey(userId, playlistId, size);
+    public void deleteFirstPage(Long playlistId, int size) {
+        String key = buildFirstPageKey(playlistId, size);
         redisTemplate.delete(key);
 
     }

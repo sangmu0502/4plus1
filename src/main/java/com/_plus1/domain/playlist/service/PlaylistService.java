@@ -199,7 +199,7 @@ public class PlaylistService {
                 ))
                 .toList();
 
-        playlistSongsCacheService.deleteFirstPage(userId, playlistId, 20);
+        playlistSongsCacheService.deleteFirstPage(playlistId, 20);
 
         return PlaylistAddSongResponse.from(playlist, songResponses);
     }
@@ -252,7 +252,7 @@ public class PlaylistService {
                 ))
                 .toList();
 
-        playlistSongsCacheService.deleteFirstPage(userId, playlistId, 20);
+        playlistSongsCacheService.deleteFirstPage(playlistId, 20);
 
         return PlaylistAddSongResponse.from(playlist, songResponses);
     }
@@ -274,7 +274,7 @@ public class PlaylistService {
 
         if(pageable.getPageNumber()==0 && pageable.getPageSize()==20) {
 
-            Page<PlaylistSongItemResponse> cached = playlistSongsCacheService.getFirstPage(userId, playlistId, pageable.getPageSize());
+            Page<PlaylistSongItemResponse> cached = playlistSongsCacheService.getFirstPage(playlistId, pageable.getPageSize());
 
             if (cached != null) {
                 return cached;
@@ -304,7 +304,7 @@ public class PlaylistService {
         Page<PlaylistSongItemResponse> result = page.map(ps -> PlaylistSongItemResponse.from(ps, artistsBySongId));
 
         if (pageable.getPageNumber()==0 && pageable.getPageSize()==20)
-            playlistSongsCacheService.saveFirstPage(userId, playlistId, pageable.getPageSize(), result);
+            playlistSongsCacheService.saveFirstPage(playlistId, pageable.getPageSize(), result);
 
         return result;
 
