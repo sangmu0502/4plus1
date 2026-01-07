@@ -37,8 +37,10 @@ dependencies {
 
     // 2026-01-04 작성자 탁진수 : spring-boot-starter-cache
     implementation 'org.springframework.boot:spring-boot-starter-cache'
-//    implementation("org.springframework.boot:spring-boot-starter-data-redis")
+    implementation("org.springframework.boot:spring-boot-starter-data-redis")
 //    implementation("org.springframework.boot:spring-boot-starter-actuator")
+
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
 
     // 2026-01-05 작성자 탁진수 : caffeine : TTL
     implementation 'com.github.ben-manes.caffeine:caffeine:3.2.2'

@@ -38,6 +38,7 @@ public class PlaylistService {
     private final PlaylistSongRepository playlistSongRepository;
     private final SongArtistRepository songArtistRepository;
     private final SongRepository songRepository;
+    private final PlaylistSongsCacheService playlistSongsCacheService;
 
     // 플리 생성
     @Transactional
@@ -198,6 +199,8 @@ public class PlaylistService {
                 ))
                 .toList();
 
+        playlistSongsCacheService.deleteFirstPage(userId, playlistId, 20);
+
         return PlaylistAddSongResponse.from(playlist, songResponses);
     }
 
@@ -249,10 +252,13 @@ public class PlaylistService {
                 ))
                 .toList();
 
+        playlistSongsCacheService.deleteFirstPage(userId, playlistId, 20);
+
         return PlaylistAddSongResponse.from(playlist, songResponses);
     }
 
 
+    // 플리 노래 리스트 가져오기
     @Transactional(readOnly = true)
     public Page<PlaylistSongItemResponse> getPlaylistSongs(Long userId, Long playlistId, Pageable pageable) {
 
@@ -264,6 +270,16 @@ public class PlaylistService {
 
         if (!playlist.getUser().getId().equals(loginUser.getId())) {
             throw new CustomException(ErrorCode.USER_ACCESS_DENIED);
+        }
+
+        if(pageable.getPageNumber()==0 && pageable.getPageSize()==20) {
+
+            Page<PlaylistSongItemResponse> cached = playlistSongsCacheService.getFirstPage(userId, playlistId, pageable.getPageSize());
+
+            if (cached != null) {
+                return cached;
+            }
+
         }
 
         Page<PlaylistSong> page = playlistSongRepository.findByPlaylistId(playlistId, pageable);
@@ -285,7 +301,13 @@ public class PlaylistService {
             }
         }
 
-        return page.map(ps -> PlaylistSongItemResponse.from(ps, artistsBySongId));
+        Page<PlaylistSongItemResponse> result = page.map(ps -> PlaylistSongItemResponse.from(ps, artistsBySongId));
+
+        if (pageable.getPageNumber()==0 && pageable.getPageSize()==20)
+            playlistSongsCacheService.saveFirstPage(userId, playlistId, pageable.getPageSize(), result);
+
+        return result;
+
     }
 
 
