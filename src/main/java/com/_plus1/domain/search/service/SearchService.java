@@ -103,6 +103,25 @@ public class SearchService {
         return searchCachedService.searchCachedSlice(condition);
     }
 
+    // 5. ES
+    public SearchSliceResponse searchVersionFive(
+            String query,
+            LocalDate from,
+            LocalDate to,
+            SearchSort sort,
+            Integer rawPage,
+            Integer rawSize
+    ) {
+        // 1. 정규화 + 객체
+        SearchKey condition = searchKeyFactory.create(query, from, to, sort, rawPage, rawSize);
+
+        // 2. 인기 검색어 기록
+        popularSearchService.record(condition.q());
+
+        // 3. return
+        return searchNoCachedService.searchEs(condition);
+    }
+
     // 기타 : popular
     public List<PopularKeywordDto> popular(int limit) {
         int n = Math.min(Math.max(limit, 1), 50);

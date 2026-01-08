@@ -26,7 +26,7 @@ public class SearchCachedService {
     // 1. Page
     @Cacheable(cacheNames="searchCached:paged",
             key="#condition.toCache()",
-            condition="#condition.cacheable()")
+            condition="#condition.cacheable()", sync = true)
     @Transactional(readOnly = true)
     public SearchResponse searchCached(SearchKey condition) {
         return new SearchResponse(
@@ -40,7 +40,7 @@ public class SearchCachedService {
     // 2. Slice
     @Cacheable(cacheNames="searchCached:sliced",
             key="#condition.toCache()",
-            condition="#condition.cacheable()")
+            condition="#condition.cacheable()", sync = true)
     @Transactional(readOnly = true)
     public SearchSliceResponse searchCachedSlice(SearchKey condition) {
         return new SearchSliceResponse(

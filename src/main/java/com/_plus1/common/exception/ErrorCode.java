@@ -13,6 +13,7 @@ public enum ErrorCode {
 
     // Common 공통 ErrorCode
     VALIDATION_ERROR(HttpStatus.BAD_REQUEST, "요청 값이 올바르지 않습니다: "),
+    BAD_REQUEST(HttpStatus.BAD_REQUEST, "잘못된 요청입니다."),
 
     // User 관련 ErrorCode
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "유저가 존재하지 않습니다."),
@@ -30,6 +31,11 @@ public enum ErrorCode {
     // Search 관련 ErrorCode
     EMPTY_QUERY(HttpStatus.BAD_REQUEST, "검색어를 입력해주세요."),
     INVALID_DATE_RANGE(HttpStatus.BAD_REQUEST, "잘못된 날짜 범위입니다."),
+    INVALID_SIZE(HttpStatus.BAD_REQUEST, "잘못된 페이지 사이즈 범위입니다."),
+    INVALID_ID(HttpStatus.BAD_REQUEST, "잘못된 ID 입니다."),
+    SORT_MISMATCH(HttpStatus.BAD_REQUEST, "일치하지 않은 정렬입니다."),
+    INVALID_CURSOR_TOKEN(HttpStatus.BAD_REQUEST, "잘못된 요청입니다."),
+    INVALID_CURSOR(HttpStatus.BAD_REQUEST, "잘못된 요청입니다."),
 
     // Song 관련 ErrorCode
     LIKE_ALREADY_EXISTS(HttpStatus.CONFLICT, "이미 좋아요를 누른 노래입니다."),

@@ -1,0 +1,33 @@
+{
+  "settings": {
+    "analysis": {
+      "analyzer": {
+        "ko_nori": { "type": "custom", "tokenizer": "nori_tokenizer", "filter": ["lowercase"] },
+        "std_lc":  { "type": "custom", "tokenizer": "standard",      "filter": ["lowercase"] }
+      }
+    }
+  },
+  "mappings": {
+    "properties": {
+      "songId":     { "type": "long" },
+      "externalId": { "type": "long" },
+      "title": {
+        "type": "text", "analyzer": "ko_nori",
+        "fields": {
+          "std":     { "type": "text", "analyzer": "std_lc" },
+          "keyword": { "type": "keyword", "ignore_above": 256 }
+        }
+      },
+      "albumTitle": {
+        "type": "text", "analyzer": "ko_nori",
+        "fields": { "std": { "type": "text", "analyzer": "std_lc" } }
+      },
+      "artistNames": {
+        "type": "text", "analyzer": "ko_nori",
+        "fields": { "std": { "type": "text", "analyzer": "std_lc" } }
+      },
+      "releaseDate": { "type": "date" },
+      "playCount":   { "type": "long" }
+    }
+  }
+}
