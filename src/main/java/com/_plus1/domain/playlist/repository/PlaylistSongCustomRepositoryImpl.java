@@ -5,7 +5,10 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+
+import java.util.List;
 
 import static com._plus1.common.entity.QPlaylistSong.playlistSong;
 import static com._plus1.common.entity.QSong.song;
@@ -22,7 +25,7 @@ public class PlaylistSongCustomRepositoryImpl implements PlaylistSongCustomRepos
     @Override
     public Page<PlaylistSong> findByPlaylistId(Long playlistId, Pageable pageable){
 
-        return (Page<PlaylistSong>)queryFactory
+        List<PlaylistSong> content = queryFactory
                 .selectFrom(playlistSong)
                 .join(playlistSong.song, song)
                 .fetchJoin()
@@ -31,6 +34,16 @@ public class PlaylistSongCustomRepositoryImpl implements PlaylistSongCustomRepos
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
+
+        Long total = queryFactory
+                .select(playlistSong.count())
+                .from(playlistSong)
+                .where(playlistSong.playlist.id.eq(playlistId))
+                .fetchOne();
+
+        long totalElements = (total == null) ? 0L : total;
+
+        return new PageImpl<>(content, pageable, totalElements);
 
 
     }
