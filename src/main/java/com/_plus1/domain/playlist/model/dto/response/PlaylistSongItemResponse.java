@@ -3,12 +3,14 @@ package com._plus1.domain.playlist.model.dto.response;
 import com._plus1.common.entity.PlaylistSong;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 import java.util.Map;
 
 @Getter
 @AllArgsConstructor
+@NoArgsConstructor
 public class PlaylistSongItemResponse {
 
     private Long playlistSongId;

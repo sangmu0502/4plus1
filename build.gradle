@@ -40,6 +40,8 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-redis")
 //    implementation("org.springframework.boot:spring-boot-starter-actuator")
 
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
+
     // 2026-01-05 작성자 탁진수 : caffeine : TTL
     implementation 'com.github.ben-manes.caffeine:caffeine:3.2.2'
 

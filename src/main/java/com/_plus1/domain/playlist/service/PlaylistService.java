@@ -18,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,12 +37,13 @@ public class PlaylistService {
     private final PlaylistSongRepository playlistSongRepository;
     private final SongArtistRepository songArtistRepository;
     private final SongRepository songRepository;
+    private final PlaylistSongsCacheService playlistSongsCacheService;
 
     // 플리 생성
     @Transactional
-    public PlaylistResponse savePlaylist(PlaylistCreateRequest request) {
-        // 아직 로그인 부분이 없어서 임시 유저 사용 -> 추후 수정 예정
-        User loginUser = userRepository.findById(1L)
+    public PlaylistResponse savePlaylist(Long userId, PlaylistCreateRequest request) {
+
+        User loginUser = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         Playlist playlist = new Playlist(request.getTitle(), request.getDescription(), loginUser);
@@ -53,9 +55,9 @@ public class PlaylistService {
 
     // 내 플리 목록 가져오기
     @Transactional(readOnly = true)
-    public PlaylistListResponse getMyPlaylists() {
-        // 임시 유저
-        User loginUser = userRepository.findById(1L)
+    public PlaylistListResponse getMyPlaylists(Long userId) {
+
+        User loginUser = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         List<Playlist> playlists = playlistRepository
@@ -77,9 +79,9 @@ public class PlaylistService {
 
     // 내 플리 상세 정보 가져오기
     @Transactional(readOnly = true)
-    public PlaylistDetailResponse getPlaylistDetail(Long playlistId) {
-        // 임시 유저
-        User loginUser = userRepository.findById(1L)
+    public PlaylistDetailResponse getPlaylistDetail(Long userId, Long playlistId) {
+
+        User loginUser = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         Playlist playlist = playlistRepository.findById(playlistId)
@@ -97,9 +99,9 @@ public class PlaylistService {
 
     // 플리 정보 수정
     @Transactional
-    public PlaylistUpdateResponse updatePlaylist(Long playlistId, PlaylistUpdateRequest request) {
-        // 임시 유저
-        User loginUser = userRepository.findById(1L)
+    public PlaylistUpdateResponse updatePlaylist(Long userId, Long playlistId, PlaylistUpdateRequest request) {
+
+        User loginUser = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         Playlist playlist = playlistRepository.findById(playlistId)
@@ -118,9 +120,9 @@ public class PlaylistService {
 
     // 플리 삭제
     @Transactional
-    public void deletePlaylist(Long playlistId) {
-        //임시 유저
-        User loginUser = userRepository.findById(1L)
+    public void deletePlaylist(Long userId, Long playlistId) {
+
+        User loginUser = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         Playlist playlist = playlistRepository.findById(playlistId)
@@ -138,10 +140,9 @@ public class PlaylistService {
 
     // 플리에 노래 추가
     @Transactional
-    public PlaylistAddSongResponse addSongToPlaylist(Long playlistId, Long songId) {
+    public PlaylistAddSongResponse addSongToPlaylist(Long userId, Long playlistId, Long songId) {
 
-        // 임시 유저
-        User loginUser = userRepository.findById(1L)
+        User loginUser = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         Playlist playlist = playlistRepository.findById(playlistId)
@@ -197,15 +198,16 @@ public class PlaylistService {
                 ))
                 .toList();
 
+        playlistSongsCacheService.deleteFirstPage(playlistId, 20);
+
         return PlaylistAddSongResponse.from(playlist, songResponses);
     }
 
     // 플리에서 노래 삭제
     @Transactional
-    public PlaylistAddSongResponse removeSongFromPlaylist(Long playlistId, Long songId) {
+    public PlaylistAddSongResponse removeSongFromPlaylist(Long userId, Long playlistId, Long songId) {
 
-        // 임시 유저
-        User loginUser = userRepository.findById(1L)
+        User loginUser = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         Playlist playlist = playlistRepository.findById(playlistId)
@@ -218,7 +220,6 @@ public class PlaylistService {
 
         PlaylistSong target = playlistSongRepository.findByPlaylistIdAndSongId(playlistId, songId)
                 .orElseThrow(() -> new CustomException(ErrorCode.PLAYLIST_SONG_NOT_FOUND));
-        // 없으면 프로젝트에 맞는 코드로 바꿔줘
 
         playlistSongRepository.delete(target);
 
@@ -226,7 +227,7 @@ public class PlaylistService {
         List<PlaylistSong> playlistSongs = playlistSongRepository
                 .findAllWithSongByPlaylistIdOrderBySortOrder(playlistId);
 
-        // artists 벌크 조회
+        // artists name list
         List<Long> songIds = playlistSongs.stream()
                 .map(ps -> ps.getSong().getId())
                 .distinct()
@@ -250,14 +251,17 @@ public class PlaylistService {
                 ))
                 .toList();
 
+        playlistSongsCacheService.deleteFirstPage(playlistId, 20);
+
         return PlaylistAddSongResponse.from(playlist, songResponses);
     }
 
 
+    // 플리 노래 리스트 가져오기
     @Transactional(readOnly = true)
-    public Page<PlaylistSongItemResponse> getPlaylistSongs(Long playlistId, Pageable pageable) {
-        // 임시 유저
-        User loginUser = userRepository.findById(1L)
+    public Page<PlaylistSongItemResponse> getPlaylistSongs(Long userId, Long playlistId, Pageable pageable) {
+
+        User loginUser = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         Playlist playlist = playlistRepository.findById(playlistId)
@@ -265,6 +269,16 @@ public class PlaylistService {
 
         if (!playlist.getUser().getId().equals(loginUser.getId())) {
             throw new CustomException(ErrorCode.USER_ACCESS_DENIED);
+        }
+
+        if(pageable.getPageNumber()==0 && pageable.getPageSize()==20) {
+
+            Page<PlaylistSongItemResponse> cached = playlistSongsCacheService.getFirstPage(playlistId, pageable.getPageSize());
+
+            if (cached != null) {
+                return cached;
+            }
+
         }
 
         Page<PlaylistSong> page = playlistSongRepository.findByPlaylistId(playlistId, pageable);
@@ -286,7 +300,13 @@ public class PlaylistService {
             }
         }
 
-        return page.map(ps -> PlaylistSongItemResponse.from(ps, artistsBySongId));
+        Page<PlaylistSongItemResponse> result = page.map(ps -> PlaylistSongItemResponse.from(ps, artistsBySongId));
+
+        if (pageable.getPageNumber()==0 && pageable.getPageSize()==20)
+            playlistSongsCacheService.saveFirstPage(playlistId, pageable.getPageSize(), result);
+
+        return result;
+
     }
 
 
