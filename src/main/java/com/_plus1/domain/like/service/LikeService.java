@@ -9,7 +9,6 @@ import com._plus1.domain.like.model.dto.LikeDto;
 import com._plus1.domain.like.model.response.LikeResponse;
 import com._plus1.domain.like.repository.LikeRepository;
 import com._plus1.domain.song.repository.SongRepository;
-import com._plus1.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,14 +19,10 @@ public class LikeService {
 
     private final LikeRepository likeRepository;
     private final SongRepository songRepository;
-    private final UserService userService;
 
     // 좋아요 생성
     @Transactional
-    public LikeResponse createLike(Long songId) {
-
-        // 로그인 유저 조회
-        User user = userService.getCurrentUser();
+    public LikeResponse createLike(Long songId, User user) {
 
         // 노래 조회
         Song song = songRepository.findById(songId)
@@ -50,10 +45,7 @@ public class LikeService {
 
     // 좋아요 삭제
     @Transactional
-    public void deleteLike(Long songId) {
-
-        // 로그인 유저 조회
-        User user = userService.getCurrentUser();
+    public void deleteLike(Long songId, User user) {
 
         // 노래 조회
         Song song = songRepository.findById(songId)
