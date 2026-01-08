@@ -4,7 +4,7 @@ GET {{host}}/api/search?q=hello
 Accept: application/json
 
 ### 2. Cache : hello
-GET {{host}}/api/search/slice/cache?q=hello
+GET {{host}}/api/search/slice?q=Last%20Christmas
 Accept: application/json
 
 ### 3. NoCache : Query, from, to, sort, page, size
@@ -44,9 +44,10 @@ GET {{host}}/api/search?q=hEllo&page=0&size=10
 Accept: application/json
 
 ### 12. ES : hEllo, page=0, size=10 : 5회 테스트.
-GET {{host}}/api/search/es?q=hEllo&page=0&size=10
+GET {{host}}/api/search/es?q=Last%20&page=0&size=10
 Accept: application/json
 
 ### 13. Slice  : hello, page=0, size=10 : 5회 테스트.
-GET {{host}}/api/search/songs/slice?q=hEllo&page=0&size=10
+GET {{host}}/api/search/slice?q=hEllo&page=0&size=10
 Accept: application/json
+

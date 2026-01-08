@@ -12,5 +12,7 @@ public record AlbumDoc(
         Long externalId,
         String title,
         List<String> artistNames,
-        LocalDate releaseDate
+        LocalDate releaseDate,
+        String titleNorm,
+        List<String> artistNamesNorm
 ) {}

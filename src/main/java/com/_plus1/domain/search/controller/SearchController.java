@@ -40,7 +40,7 @@ public class SearchController {
             @RequestParam(value="size", defaultValue = "50") Integer size
     ){
         SearchResponse data = searchService.search(q, from, to, sort, page, size);
-        return ResponseEntity.ok().body(CommonResponse.success(data, "ok"));
+        return ResponseEntity.ok().body(CommonResponse.success(data, "통합 검색 결과 조회를 성공하였습니다."));
     }
 
     // 2. PageCache
@@ -54,7 +54,7 @@ public class SearchController {
             @RequestParam(value="size", defaultValue = "50") Integer size
     ){
         SearchResponse data = searchService.searchVersionTwo(q, from, to, sort, page, size);
-        return ResponseEntity.ok().body(CommonResponse.success(data, "ok"));
+        return ResponseEntity.ok().body(CommonResponse.success(data, "통합 검색 결과 조회를 성공하였습니다."));
     }
 
     // 3. Slice
@@ -68,7 +68,7 @@ public class SearchController {
             @RequestParam(value="size", defaultValue = "50") Integer size
     ){
         SearchSliceResponse data = searchService.searchVersionThree(q, from, to, sort, page, size);
-        return ResponseEntity.ok().body(CommonResponse.success(data, "ok"));
+        return ResponseEntity.ok().body(CommonResponse.success(data, "통합 검색 결과 조회를 성공하였습니다."));
     }
 
     // 4. SliceCache
@@ -82,7 +82,7 @@ public class SearchController {
             @RequestParam(value="size", defaultValue = "50") Integer size
     ){
         SearchSliceResponse data = searchService.searchVersionFour(q, from, to, sort, page, size);
-        return ResponseEntity.ok().body(CommonResponse.success(data, "ok"));
+        return ResponseEntity.ok().body(CommonResponse.success(data, "통합 검색 결과 조회를 성공하였습니다."));
     }
 
     // 5. ES
@@ -96,7 +96,7 @@ public class SearchController {
             @RequestParam(value="size", defaultValue = "50") Integer size
     ){
         SearchSliceResponse data = searchService.searchVersionFive(q, from, to, sort, page, size);
-        return ResponseEntity.ok().body(CommonResponse.success(data, "ok"));
+        return ResponseEntity.ok().body(CommonResponse.success(data, "통합 검색 결과 조회를 성공하였습니다."));
     }
 
     @GetMapping("/popular")

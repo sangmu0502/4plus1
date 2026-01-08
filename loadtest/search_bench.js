@@ -142,7 +142,7 @@ export function esSlice() {
 // --summary-trend-stats="min,med,p(90),p(95),p(99),max,count" --summary-time-unit=ms `
 //   -e BASE_URL=http://localhost:8080 `
 //     -e Q_POOL="hello,world,test,foo,bar,baz" -e Q_MODE=rr `
-//   -e SIZE=10 -e MIXED=1 -e PAGE_SPREAD=5 `
+//   -e SIZE=10 -e MIXED=0 -e PAGE_SPREAD=5 `
 //     .\search_bench.js
 
 // 고정

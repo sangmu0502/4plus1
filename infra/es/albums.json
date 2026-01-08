@@ -12,17 +12,21 @@
       "albumId":    { "type": "long" },
       "externalId": { "type": "long" },
       "title": {
-        "type": "text", "analyzer": "ko_nori",
+        "type": "text",
+        "analyzer": "ko_nori",
         "fields": {
           "std":     { "type": "text", "analyzer": "std_lc" },
           "keyword": { "type": "keyword", "ignore_above": 256 }
         }
       },
       "artistNames": {
-        "type": "text", "analyzer": "ko_nori",
+        "type": "text",
+        "analyzer": "ko_nori",
         "fields": { "std": { "type": "text", "analyzer": "std_lc" } }
       },
-      "releaseDate": { "type": "date" }
+      "releaseDate": { "type": "date" },
+      "titleNorm":       { "type": "keyword", "ignore_above": 256 },
+      "artistNamesNorm": { "type": "keyword", "ignore_above": 256 }
     }
   }
 }

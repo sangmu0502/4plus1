@@ -27,7 +27,10 @@
         "fields": { "std": { "type": "text", "analyzer": "std_lc" } }
       },
       "releaseDate": { "type": "date" },
-      "playCount":   { "type": "long" }
+      "playCount":   { "type": "long" },
+      "titleNorm":       { "type": "keyword", "ignore_above": 256 },
+      "albumTitleNorm":  { "type": "keyword", "ignore_above": 256 },
+      "artistNamesNorm": { "type": "keyword", "ignore_above": 256 }
     }
   }
 }

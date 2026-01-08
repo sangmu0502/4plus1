@@ -4,6 +4,7 @@ import com._plus1.common.exception.CustomException;
 import com._plus1.common.exception.ErrorCode;
 import com._plus1.domain.search.model.dto.SearchSort;
 import com._plus1.domain.search.model.dto.cache.SearchKey;
+import com._plus1.domain.search.model.dto.query.SearchQuery;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -25,7 +26,8 @@ public class SearchKeyFactory{
             Integer rawPage,
             Integer rawSize
     ){
-        String query = normalizeQuery(rawQuery);
+        // ES 용 builder
+        SearchQuery query = buildQuery(rawQuery);
 
         SearchSort safeSort = (sort == null) ? SearchSort.LATEST : sort;
 
@@ -38,12 +40,24 @@ public class SearchKeyFactory{
     }
 
     // 1. Query Normalize
-    private String normalizeQuery(String rawQuery){
+    private SearchQuery buildQuery(String rawQuery){
         if(rawQuery == null || rawQuery.isBlank()){
             throw new CustomException(ErrorCode.EMPTY_QUERY);
         }
-        // token
-        return rawQuery.strip().replaceAll("\\s+", " ").toLowerCase(Locale.ROOT);
+        String raw = rawQuery; // 원문
+        String canon = rawQuery.strip().replaceAll("\\s+", " "); // 공백 정리
+        String text = canon.toLowerCase(Locale.ROOT); // 분석 : lower
+
+        // 키용 정규화 : 공백용 특수문자 제거
+        String norm = normalizeForKey(text);
+
+        return new SearchQuery(raw, canon, text, norm);
+    }
+
+    // key 정규화
+    private String normalizeForKey(String lowerText) {
+        if (lowerText == null) return null;
+        return lowerText.replaceAll("[^0-9a-z\\uAC00-\\uD7A3]+", ""); // 가 ~ 힣, 0~9, a-z : A-Z는 미포함.
     }
 
     // 2. Page Normalize
