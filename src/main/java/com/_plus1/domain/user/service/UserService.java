@@ -6,7 +6,7 @@ import com._plus1.common.entity.SongArtist;
 import com._plus1.common.entity.User;
 import com._plus1.common.exception.CustomException;
 import com._plus1.common.exception.ErrorCode;
-import com._plus1.domain.album.repository.SongArtistRepository;
+import com._plus1.domain.song.repository.SongArtistRepository;
 import com._plus1.domain.like.repository.LikeRepository;
 import com._plus1.domain.user.dto.request.UserSignupRequest;
 import com._plus1.domain.user.dto.request.UserUpdateRequest;
