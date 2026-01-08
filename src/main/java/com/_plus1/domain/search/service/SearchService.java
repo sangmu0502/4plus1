@@ -39,7 +39,7 @@ public class SearchService {
         SearchKey condition = searchKeyFactory.create(query, from, to, sort, rawPage, rawSize);
 
         // 2. 인기 검색어 기록
-        popularSearchService.record(condition.q());
+        popularSearchService.record(condition.query().norm());
 
         // 3. return
         return searchNoCachedService.searchNoCache(condition);
@@ -59,7 +59,7 @@ public class SearchService {
         SearchKey condition = searchKeyFactory.create(query, from, to, sort, rawPage, rawSize);
 
         // 2. 인기 검색어 기록
-        popularSearchService.record(condition.q());
+        popularSearchService.record(condition.query().norm());
 
         // 3. return
         return searchCachedService.searchCached(condition);
@@ -78,7 +78,7 @@ public class SearchService {
         SearchKey condition = searchKeyFactory.create(query, from, to, sort, rawPage, rawSize);
 
         // 2. 인기 검색어 기록
-        popularSearchService.record(condition.q());
+        popularSearchService.record(condition.query().norm());
 
         // 3. return
         return searchNoCachedService.searchSliceNoCache(condition);
@@ -97,7 +97,7 @@ public class SearchService {
         SearchKey condition = searchKeyFactory.create(query, from, to, sort, rawPage, rawSize);
 
         // 2. 인기 검색어 기록
-        popularSearchService.record(condition.q());
+        popularSearchService.record(condition.query().norm());
 
         // 3. return
         return searchCachedService.searchCachedSlice(condition);
@@ -116,7 +116,7 @@ public class SearchService {
         SearchKey condition = searchKeyFactory.create(query, from, to, sort, rawPage, rawSize);
 
         // 2. 인기 검색어 기록
-        popularSearchService.record(condition.q());
+        popularSearchService.record(condition.query().norm());
 
         // 3. return
         return searchNoCachedService.searchEs(condition);

@@ -13,5 +13,8 @@ public record SongDoc(
         String albumTitle,
         List<String> artistNames,
         LocalDate releaseDate,
-        Long playCount
+        Long playCount,
+        String titleNorm,
+        String albumTitleNorm,
+        List<String> artistNamesNorm
 ) {}

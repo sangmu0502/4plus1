@@ -6,5 +6,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 public record ArtistDoc(
         Long artistId,
         Long externalId,
-        String name
+        String name,
+        String nameNorm
 ) {}

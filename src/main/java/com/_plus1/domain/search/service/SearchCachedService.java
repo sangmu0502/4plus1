@@ -30,7 +30,7 @@ public class SearchCachedService {
     @Transactional(readOnly = true)
     public SearchResponse searchCached(SearchKey condition) {
         return new SearchResponse(
-                condition.q(),
+                condition.query().norm(),
                 searchQueryRepository.searchSongs(condition),
                 searchQueryRepository.searchAlbums(condition),
                 searchQueryRepository.searchArtists(condition)
@@ -44,7 +44,7 @@ public class SearchCachedService {
     @Transactional(readOnly = true)
     public SearchSliceResponse searchCachedSlice(SearchKey condition) {
         return new SearchSliceResponse(
-                condition.q(),
+                condition.query().norm(),
                 searchQueryRepository.searchSongsSlice(condition),
                 searchQueryRepository.searchAlbumsSlice(condition),
                 searchQueryRepository.searchArtistsSlice(condition)

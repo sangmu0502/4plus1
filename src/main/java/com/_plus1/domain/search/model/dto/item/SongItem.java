@@ -1,6 +1,6 @@
 package com._plus1.domain.search.model.dto.item;
 
-import java.io.Serializable;
+
 import java.time.LocalDate;
 
 public record SongItem(

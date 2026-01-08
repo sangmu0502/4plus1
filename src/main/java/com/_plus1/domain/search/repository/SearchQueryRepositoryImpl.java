@@ -44,7 +44,7 @@ public class SearchQueryRepositoryImpl implements SearchQueryRepository {
     ){
         // 1. where
         BooleanBuilder where = searchPredicateFactory.forSong(
-                condition.q(),
+                condition.query().norm(),
                 condition.from(),
                 condition.to(),
                 song,
@@ -98,7 +98,7 @@ public class SearchQueryRepositoryImpl implements SearchQueryRepository {
     public Page<AlbumItem> searchAlbums(SearchKey condition){
         // 1. where
         BooleanBuilder where = searchPredicateFactory.forAlbum(
-                condition.q(), condition.from(), condition.to(), album, artist, albumArtist);
+                condition.query().norm(), condition.from(), condition.to(), album, artist, albumArtist);
 
         // 2. sort
         OrderSpecifier<?> orderBy = switch (condition.sort()) {
@@ -139,7 +139,7 @@ public class SearchQueryRepositoryImpl implements SearchQueryRepository {
 
     @Override
     public Page<ArtistItem> searchArtists(SearchKey condition){
-        BooleanBuilder where = searchPredicateFactory.forArtist(condition.q(), artist);
+        BooleanBuilder where = searchPredicateFactory.forArtist(condition.query().norm(), artist);
 
         OrderSpecifier<?> orderBy = switch (condition.sort()) {
             case POPULAR -> artist.id.desc();
@@ -177,7 +177,7 @@ public class SearchQueryRepositoryImpl implements SearchQueryRepository {
     public Slice<SongItem> searchSongsSlice(SearchKey condition){
         // 1. where
         BooleanBuilder where = searchPredicateFactory.forSong(
-                condition.q(), condition.from(), condition.to(),
+                condition.query().norm(), condition.from(), condition.to(),
                 song, album, artist, songArtist);
 
         // 2. sort
@@ -223,7 +223,7 @@ public class SearchQueryRepositoryImpl implements SearchQueryRepository {
     public Slice<AlbumItem> searchAlbumsSlice(SearchKey condition){
         // 1. where
         BooleanBuilder where = searchPredicateFactory.forAlbum(
-                condition.q(), condition.from(), condition.to(), album, artist, albumArtist);
+                condition.query().norm(), condition.from(), condition.to(), album, artist, albumArtist);
 
         // 2. sort
         OrderSpecifier<?> orderBy = switch (condition.sort()) {
@@ -262,7 +262,7 @@ public class SearchQueryRepositoryImpl implements SearchQueryRepository {
 
     @Override
     public Slice<ArtistItem> searchArtistsSlice(SearchKey condition){
-        BooleanBuilder where = searchPredicateFactory.forArtist(condition.q(), artist);
+        BooleanBuilder where = searchPredicateFactory.forArtist(condition.query().norm(), artist);
 
         OrderSpecifier<?> orderBy = switch (condition.sort()) {
             case POPULAR -> artist.id.desc();

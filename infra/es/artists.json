@@ -17,7 +17,8 @@
           "std":     { "type": "text", "analyzer": "std_lc" },
           "keyword": { "type": "keyword", "ignore_above": 256 }
         }
-      }
+      },
+      "nameNorm": { "type": "keyword", "ignore_above": 256 }
     }
   }
 }
