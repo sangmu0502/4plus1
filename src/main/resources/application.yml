@@ -1,16 +1,14 @@
-
 spring:
+  data:
+    redis:
+      host: localhost
+      port: 6379
   application:
     name: 4plus1
   config:
     import: optional:file:.env[.properties]
 
-  data:
-    redis:
-      host: localhost
-      port: 6379
-
-    # database
+  # database
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: ${DB_URL}
@@ -26,6 +24,15 @@ spring:
         dialect: org.hibernate.dialect.MySQLDialect
         format_sql: true
     show-sql: true
+
+  # sql
+  # 실행 시 Index 적용
+  sql:
+    init:
+      mode: always
+      continue-on-error: true
+      schema-locations: classpath:schema/add_index_for_songs_and_genres_query.sql
+
 jwt:
   secret: ${SECRET_KEY}
 

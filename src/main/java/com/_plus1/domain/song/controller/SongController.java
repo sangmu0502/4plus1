@@ -100,6 +100,16 @@ public class SongController {
                 .body(CommonResponse.success(response, "인기 음악 조회를 성공하였습니다."));
     }
 
+    @GetMapping("/top/v2")
+    public ResponseEntity<CommonResponse<SongTopTenResponse>> getTopTenSongsV2() {
+
+        SongTopTenResponse response = songService.getTopTenSongsV2();
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(CommonResponse.success(response, "인기 음악 조회 V2를 성공하였습니다."));
+    }
+
     @GetMapping("/korea/new")
     public ResponseEntity<CommonResponse<SongLatestResponse>> getLatestDomesticSongs() {
 

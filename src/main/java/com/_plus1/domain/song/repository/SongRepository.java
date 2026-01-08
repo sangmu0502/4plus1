@@ -43,7 +43,7 @@ public interface SongRepository extends JpaRepository<Song, Long> {
         )
     """
     )
-    Page<Song> findKoreanPopularSongs (@Param("genreCodes") List<String> genreCodes, Pageable pageable);
+    Page<Song> findSongsByGenreCodesWithPage(@Param("genreCodes") List<String> genreCodes, Pageable pageable);
 
     List<Song> findTop10ByOrderByPlayCountDesc();
 

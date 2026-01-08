@@ -1,4 +1,4 @@
-package com._plus1.domain.album.repository;
+package com._plus1.domain.song.repository;
 
 import com._plus1.common.entity.SongGenre;
 import org.springframework.data.jpa.repository.JpaRepository;

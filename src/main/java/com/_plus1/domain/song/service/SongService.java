@@ -4,7 +4,7 @@ import com._plus1.common.entity.AlbumArtist;
 import com._plus1.common.entity.Song;
 import com._plus1.common.exception.CustomException;
 import com._plus1.common.exception.ErrorCode;
-import com._plus1.domain.album.repository.SongArtistRepository;
+import com._plus1.domain.song.repository.SongArtistRepository;
 import com._plus1.domain.song.model.dto.SongDto;
 import com._plus1.domain.song.model.enums.GlobalPopularGenreCode;
 import com._plus1.domain.song.model.enums.KoreanPopularGenreCode;
@@ -14,9 +14,11 @@ import com._plus1.domain.song.repository.SongRepository;
 import com._plus1.domain.album.repository.AlbumArtistRepository;
 import com._plus1.domain.song.model.response.*;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.data.domain.PageRequest;
@@ -25,15 +27,18 @@ import lombok.RequiredArgsConstructor;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class SongService {
 
     private final SongRepository songRepository;
     private final SongArtistRepository songArtistRepository;
     private final AlbumArtistRepository albumArtistRepository;
+    private final SongCacheService songCacheService;
 
     // 노래 재생 api
     @Transactional
@@ -61,7 +66,7 @@ public class SongService {
 
         // 3. Song 조회
         Page<Song> songPage =
-                songRepository.findKoreanPopularSongs(genreCodes, pageable);
+                songRepository.findSongsByGenreCodesWithPage(genreCodes, pageable);
 
         if (songPage.isEmpty()) {
             throw new CustomException(ErrorCode.SONG_NOT_FOUND);
@@ -116,7 +121,7 @@ public class SongService {
 
         // 3. Song 조회 (Page 유지)
         Page<Song> songPage =
-                songRepository.findKoreanPopularSongs(genreCodes, pageable);
+                songRepository.findSongsByGenreCodesWithPage(genreCodes, pageable);
         // 쿼리 재사용 (장르 코드만 다름)
 
         if (songPage.isEmpty()) {
@@ -218,6 +223,43 @@ public class SongService {
         return new SongTopTenResponse(results);
     }
 
+    @Transactional(readOnly = true)
+    public SongTopTenResponse getTopTenSongsV2() {
+
+        // 1단계 캐시가 있나요?
+        Set<Long> cachedSongIds =
+                songCacheService.getTopTenSongIds();
+
+        if (cachedSongIds != null) {
+            log.info("Redis ZSET Cache Hit");
+
+            List<Song> songs =
+                    songRepository.findAllById(cachedSongIds);
+
+            return buildTopTenResponse(songs);
+        }
+
+        // 2단계 캐시가 없으면 DB에서 직접 조회
+        log.info("Redis Cache Miss");
+        List<Song> songs =
+                songRepository.findTop10ByOrderByPlayCountDesc();
+
+        // 3단계 캐시 저장
+        Set<ZSetOperations.TypedTuple<Object>> values =
+                songs.stream()
+                        .map(song ->
+                                ZSetOperations.TypedTuple.of(
+                                        (Object) song.getId().toString(),
+                                        (double) song.getPlayCount()
+                                )
+                        )
+                        .collect(Collectors.toSet());
+
+        songCacheService.saveTopTenSongs(values);
+
+        return buildTopTenResponse(songs);
+    }
+
     // 국내, 해외 최신음악 조회 공통 메서드
     public SongLatestResponse getLatestSongsByGenreCodes(List<String> genreCodes) {
 
@@ -281,6 +323,41 @@ public class SongService {
                 "GN0900", "GN1000", "GN1100",
                 "GN1200", "GN1300", "GN1400"
         ));
+    }
+
+    // Response 로직 분리
+    private SongTopTenResponse buildTopTenResponse(List<Song> songs) {
+
+        List<Long> albumIds = songs.stream()
+                .map(song -> song.getAlbum().getId())
+                .distinct()
+                .toList();
+
+        Map<Long, List<String>> artistMap =
+                albumArtistRepository.findByAlbumIdIn(albumIds)
+                        .stream()
+                        .collect(Collectors.groupingBy(
+                                aa -> aa.getAlbum().getId(),
+                                Collectors.mapping(
+                                        aa -> aa.getArtist().getName(),
+                                        Collectors.toList()
+                                )
+                        ));
+
+        List<SongTopTenItemResponse> results =
+                songs.stream()
+                        .map(song ->
+                                SongTopTenItemResponse.from(
+                                        SongDto.from(song),
+                                        artistMap.getOrDefault(
+                                                song.getAlbum().getId(),
+                                                List.of()
+                                        )
+                                )
+                        )
+                        .toList();
+
+        return new SongTopTenResponse(results);
     }
 
 }

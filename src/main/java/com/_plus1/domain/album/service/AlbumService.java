@@ -6,6 +6,8 @@ import com._plus1.common.entity.Song;
 import com._plus1.common.exception.CustomException;
 import com._plus1.domain.album.model.response.*;
 import com._plus1.domain.album.repository.*;
+import com._plus1.domain.song.repository.SongArtistRepository;
+import com._plus1.domain.song.repository.SongGenreRepository;
 import com._plus1.domain.song.repository.SongRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
