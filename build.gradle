@@ -37,7 +37,7 @@ dependencies {
 
     // 2026-01-04 작성자 탁진수 : spring-boot-starter-cache
     implementation 'org.springframework.boot:spring-boot-starter-cache'
-//    implementation("org.springframework.boot:spring-boot-starter-data-redis")
+    implementation("org.springframework.boot:spring-boot-starter-data-redis")
 //    implementation("org.springframework.boot:spring-boot-starter-actuator")
 
     // 2026-01-05 작성자 탁진수 : caffeine : TTL
