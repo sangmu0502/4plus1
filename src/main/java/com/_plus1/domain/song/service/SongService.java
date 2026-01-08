@@ -4,7 +4,7 @@ import com._plus1.common.entity.AlbumArtist;
 import com._plus1.common.entity.Song;
 import com._plus1.common.exception.CustomException;
 import com._plus1.common.exception.ErrorCode;
-import com._plus1.domain.album.repository.SongArtistRepository;
+import com._plus1.domain.song.repository.SongArtistRepository;
 import com._plus1.domain.song.model.dto.SongDto;
 import com._plus1.domain.song.model.enums.GlobalPopularGenreCode;
 import com._plus1.domain.song.model.enums.KoreanPopularGenreCode;
@@ -61,7 +61,7 @@ public class SongService {
 
         // 3. Song 조회
         Page<Song> songPage =
-                songRepository.findKoreanPopularSongs(genreCodes, pageable);
+                songRepository.findSongsByGenreCodesWithPage(genreCodes, pageable);
 
         if (songPage.isEmpty()) {
             throw new CustomException(ErrorCode.SONG_NOT_FOUND);
@@ -116,7 +116,7 @@ public class SongService {
 
         // 3. Song 조회 (Page 유지)
         Page<Song> songPage =
-                songRepository.findKoreanPopularSongs(genreCodes, pageable);
+                songRepository.findSongsByGenreCodesWithPage(genreCodes, pageable);
         // 쿼리 재사용 (장르 코드만 다름)
 
         if (songPage.isEmpty()) {
