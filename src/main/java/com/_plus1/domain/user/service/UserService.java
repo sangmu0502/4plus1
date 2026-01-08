@@ -35,15 +35,6 @@ public class UserService {
     private final SongArtistRepository songArtistRepository;
     private final PasswordEncoder passwordEncoder;
 
-    // 작성자 : 이상무
-    // 유저 정보가 필요해서 임시로 불러올 유저 메서드 생성
-    @Transactional(readOnly = true)
-    public User getCurrentUser() {
-        return userRepository.findById(1L)
-                .orElseThrow(() -> new IllegalStateException("더미 유저가 존재하지 않습니다."));
-    }
-
-
     // 회원가입
     @Transactional
     public UserSignupResponse signup(UserSignupRequest request) {
