@@ -1,0 +1,23 @@
+{
+  "settings": {
+    "analysis": {
+      "analyzer": {
+        "ko_nori": { "type": "custom", "tokenizer": "nori_tokenizer", "filter": ["lowercase"] },
+        "std_lc":  { "type": "custom", "tokenizer": "standard",      "filter": ["lowercase"] }
+      }
+    }
+  },
+  "mappings": {
+    "properties": {
+      "artistId":   { "type": "long" },
+      "externalId": { "type": "long" },
+      "name": {
+        "type": "text", "analyzer": "ko_nori",
+        "fields": {
+          "std":     { "type": "text", "analyzer": "std_lc" },
+          "keyword": { "type": "keyword", "ignore_above": 256 }
+        }
+      }
+    }
+  }
+}

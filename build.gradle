@@ -37,13 +37,19 @@ dependencies {
 
     // 2026-01-04 작성자 탁진수 : spring-boot-starter-cache
     implementation 'org.springframework.boot:spring-boot-starter-cache'
+<<<<<<< HEAD
     implementation("org.springframework.boot:spring-boot-starter-data-redis")
+=======
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+>>>>>>> 2038205 (✨ feat: Search V2 : ES 도입 + 테스트코드 정리, 로직 정리.)
 //    implementation("org.springframework.boot:spring-boot-starter-actuator")
 
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
 
     // 2026-01-05 작성자 탁진수 : caffeine : TTL
     implementation 'com.github.ben-manes.caffeine:caffeine:3.2.2'
+    // 2026-01-08 작성자 탁진수 : ES
+    implementation "co.elastic.clients:elasticsearch-java:8.12.2"
 
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'com.mysql:mysql-connector-j'

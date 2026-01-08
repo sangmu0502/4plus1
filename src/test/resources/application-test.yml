@@ -1,0 +1,4 @@
+app:
+  cache:
+    maximum-size: 10000
+    expire-after-write-ms: 200 # 0.2초

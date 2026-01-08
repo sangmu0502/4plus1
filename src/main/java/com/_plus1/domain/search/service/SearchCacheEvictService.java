@@ -8,6 +8,6 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class SearchCacheEvictService {
 
-    @CacheEvict(cacheNames={"search:songs", "search:albums", "search:artists"}, allEntries=true)
+    @CacheEvict(cacheNames={"searchCached:paged", "searchCached:sliced"}, allEntries=true)
     public void clearAll(){}
 }

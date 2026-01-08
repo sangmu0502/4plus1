@@ -1,8 +1,12 @@
 package com._plus1.domain.search.model.dto.item;
 
+import java.io.Serializable;
+import java.time.LocalDate;
+
 public record SongItem(
         Long id,
         Long externalId,
         String title,
-        Long playCount
-){}
+        Long playCount,
+        LocalDate releaseDate
+)  {}
