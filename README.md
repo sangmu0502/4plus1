@@ -104,11 +104,14 @@ docker run -d -p 6379:6379 --name redis-container redis:latest
 
 >
 
-## 6. ERD
+## 6. WireFrame + ERD
 
 ---
 
-팀 노션의 ERD 이미지와 동일, Git Repository의 ReadMe에 복붙할때엔 이미지 첨부
+<img width="909" height="810" alt="image" src="https://github.com/user-attachments/assets/38c7a201-5aba-4477-9f85-ce8973a77995" />
+
+
+<img width="1840" height="831" alt="ERD최종" src="https://github.com/user-attachments/assets/18174fe3-3b87-4707-8e1f-6fdca7aa5a41" />
 
 ---
 
@@ -194,7 +197,12 @@ docker run -d -p 6379:6379 --name redis-container redis:latest
 
 ---
 
-Git Repository의 ReadMe에 복붙할때엔 팀노션의 API 명세서 이미지 캡쳐 첨부 + 노션링크 첨부
+[노션링크 첨부](https://www.notion.so/teamsparta/4-4-1-2cb2dc3ef514801e9b00d28c46460418?source=copy_link)
+
+
+<img width="1186" height="757" alt="image" src="https://github.com/user-attachments/assets/5f04e990-9bfd-49ee-a2af-029d53e5bc82" />
+<img width="1275" height="879" alt="image" src="https://github.com/user-attachments/assets/39bc9ea5-601b-4e49-8bb3-55e312321736" />
+<img width="1205" height="367" alt="image" src="https://github.com/user-attachments/assets/c293b6b8-0a6e-4b98-92cb-e40a1747b8d4" />
 
 ---
 
@@ -223,8 +231,9 @@ Git Repository의 ReadMe에 복붙할때엔 팀노션의 API 명세서 이미지
 
 ---
 
-Spring plus 팀 프로크
+#### Spring plus 팀 프로젝트
+- 이상무, 김동욱, 임정하, 장서연, 탁진수
 
-ppt 링크
+[ppt 링크](https://www.canva.com/design/DAG9zTXiQRw/AYF-984bvg368r9vemWnew/edit?utm_content=DAG9zTXiQRw&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
 
-(각자 git 하이퍼링크 달면 좋음)
+(각자 git 하이퍼링크 달면 좋습니다.)
