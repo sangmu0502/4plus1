@@ -1,3 +1,6 @@
+spring:
+  cache:
+    type: caffeine
 app:
   cache:
     maximum-size: 50000

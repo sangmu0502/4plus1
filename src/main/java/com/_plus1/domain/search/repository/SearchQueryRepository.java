@@ -9,9 +9,6 @@ import com._plus1.domain.search.model.dto.item.SongItem;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Slice;
 
-import java.time.LocalDate;
-
-
 public interface SearchQueryRepository {
 
     Page<SongItem> searchSongs(SearchKey condition);

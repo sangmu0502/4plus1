@@ -1,4 +1,3 @@
-
 spring:
   application:
     name: 4plus1
@@ -12,7 +11,7 @@ spring:
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
 
-  #jpa
+  # jpa
   jpa:
     hibernate:
       ddl-auto: update
@@ -21,3 +20,12 @@ spring:
         dialect: org.hibernate.dialect.MySQLDialect
         format_sql: true
     show-sql: true
+
+popular:
+  record:
+    enabled: false
+
+app:
+  es:
+    host: http://localhost:9200
+

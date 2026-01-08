@@ -1,0 +1,52 @@
+@host = http://localhost:8080
+### 1. NoCache : hello
+GET {{host}}/api/search?q=hello
+Accept: application/json
+
+### 2. Cache : hello
+GET {{host}}/api/search/slice/cache?q=hello
+Accept: application/json
+
+### 3. NoCache : Query, from, to, sort, page, size
+GET {{host}}/api/search?q=hello&from=2010-01-01&to=2011-01-29&sort=LATEST&page=0&size=10
+Accept: application/json
+
+### 4. Cache : Query, from, to, sort, page=0, size
+GET {{host}}/api/search/ver2?q=hello&from=2010-01-01&to=2011-01-29&sort=LATEST&page=0&size=10
+Accept: application/json
+
+### 5. NoCache : Query, from, to, sort, page=1, size
+GET {{host}}/api/search?q=hello&from=2010-01-01&to=2011-01-29&sort=LATEST&page=1&size=10
+Accept: application/json
+
+### 6. Cache : Query, from, to, sort, page=1, size : 캐시 미적용 테스트
+GET {{host}}/api/search/ver2?q=hello&from=2010-01-01&to=2011-01-29&sort=LATEST&page=1&size=10
+Accept: application/json
+
+### 7. Page NoCache : hello, page=0, size=10 : 5회 테스트.
+GET {{host}}/api/search?q=hello&page=0&size=10
+Accept: application/json
+
+### 8. Page Cache :  hello, page=0, size=10 : 5회 테스트.
+GET {{host}}/api/search/cache?q=hllo&page=0&size=10
+Accept: application/json
+
+### 9. Slice NoCache : hello, page=0, size=10 : 5회 테스트.
+GET {{host}}/api/search/slice?q=hello&page=0&size=10
+Accept: application/json
+
+### 10. Slice Cache : hello, page=0, size=10 : 5회 테스트.
+GET {{host}}/api/search/slice/cache?q=hello&page=0&size=10
+Accept: application/json
+
+### 11. Page NoCache : hEllo, page=0, size=10 : 5회 테스트.
+GET {{host}}/api/search?q=hEllo&page=0&size=10
+Accept: application/json
+
+### 12. ES : hEllo, page=0, size=10 : 5회 테스트.
+GET {{host}}/api/search/es?q=hEllo&page=0&size=10
+Accept: application/json
+
+### 13. Slice  : hello, page=0, size=10 : 5회 테스트.
+GET {{host}}/api/search/songs/slice?q=hEllo&page=0&size=10
+Accept: application/json

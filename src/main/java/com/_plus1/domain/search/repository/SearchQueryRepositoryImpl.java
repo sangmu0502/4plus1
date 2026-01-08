@@ -68,7 +68,9 @@ public class SearchQueryRepositoryImpl implements SearchQueryRepository {
                         song.id,
                         song.externalId,
                         song.title,
-                        song.playCount))
+                        song.playCount,
+                        song.releaseDate
+                ))
                 .from(song)
                 .leftJoin(song.album, album)
                 .where(where)
@@ -114,7 +116,7 @@ public class SearchQueryRepositoryImpl implements SearchQueryRepository {
                         AlbumItem.class,
                         album.id,
                         album.externalId,
-                        album.title))
+                        album.title, album.releaseDate))
                 .from(album)
                 .where(where)
                 .orderBy(orderBy, album.id.desc())
@@ -196,7 +198,7 @@ public class SearchQueryRepositoryImpl implements SearchQueryRepository {
                                 song.id,
                                 song.externalId,
                                 song.title,
-                                song.playCount))
+                                song.playCount, song.releaseDate))
                 .from(song)
                 .leftJoin(song.album, album)
                 .where(where)
@@ -242,7 +244,7 @@ public class SearchQueryRepositoryImpl implements SearchQueryRepository {
                         AlbumItem.class,
                         album.id,
                         album.externalId,
-                        album.title))
+                        album.title, album.releaseDate))
                 .from(album)
                 .where(where)
                 .orderBy(orderBy, album.id.desc())

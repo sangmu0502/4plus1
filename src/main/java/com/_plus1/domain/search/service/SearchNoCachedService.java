@@ -1,10 +1,14 @@
 package com._plus1.domain.search.service;
 
 import com._plus1.domain.search.model.dto.cache.SearchKey;
+
 import com._plus1.domain.search.model.dto.response.SearchResponse;
 import com._plus1.domain.search.model.dto.response.SearchSliceResponse;
+
 import com._plus1.domain.search.repository.SearchQueryRepository;
+import com._plus1.domain.search.service.port.SearchEsPort;
 import lombok.RequiredArgsConstructor;
+
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +20,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class SearchNoCachedService {
 
     private final SearchQueryRepository searchQueryRepository;
+    private final SearchEsPort searchEsPort;
+
 
     // 1. Page
     @Transactional(readOnly = true)
@@ -36,6 +42,17 @@ public class SearchNoCachedService {
                 searchQueryRepository.searchSongsSlice(condition),
                 searchQueryRepository.searchAlbumsSlice(condition),
                 searchQueryRepository.searchArtistsSlice(condition)
+        );
+    }
+
+    // 3. ES
+    @Transactional(readOnly = true)
+    public SearchSliceResponse searchEs(SearchKey condition) {
+        return new SearchSliceResponse(
+                condition.q(),
+                searchEsPort.searchSongsSlice(condition),
+                searchEsPort.searchAlbumsSlice(condition),
+                searchEsPort.searchArtistsSlice(condition)
         );
     }
 }

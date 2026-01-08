@@ -5,6 +5,7 @@ import com._plus1.common.entity.PopularSearch;
 import com._plus1.domain.search.model.dto.PopularKeywordDto;
 import com._plus1.domain.search.repository.PopularSearchRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
@@ -18,6 +19,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PopularSearchService {
 
+    @Value("${popular.record.enabled:true}")
+    private boolean recordEnabled;
     private final PopularSearchRepository popularSearchRepository;
 
     // 1. /popular?limit=10 : DB에서 Top N : 뽑아서 Return
@@ -31,10 +34,13 @@ public class PopularSearchService {
         return PopularKeywordDto.from(items);
     }
 
+
     @CacheEvict(cacheNames = "popularKeywords", allEntries = true)
     @Transactional
     public void record(String keyword) {
+        if (!recordEnabled) return;
         if (keyword == null || keyword.isBlank()) return;
         popularSearchRepository.upsertIncrement(keyword.trim());
     }
+
 }
