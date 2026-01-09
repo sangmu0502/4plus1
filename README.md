@@ -215,12 +215,14 @@ docker run -d -p 6379:6379 --name redis-container redis:latest
 ### 1) DataSet을 Local DB에 넣기까지의 과정 (진수님)
 
 0. application.seed.yml
-    
-    ![image.png](attachment:1ad0c89d-c0f0-4217-8faa-a08372e6d41e:image.png)
+
+<img width="342" height="87" alt="image" src="https://github.com/user-attachments/assets/4d43f2fc-43a9-4573-8307-05694481d1f0" />
+
     
 - dir : 해당 디렉터리 경로
 - limit : 데이터 삽입 숫자.
 1. Csvs.java
+
 - open() : 첫 줄 헤더를 컬럼 명으로 매핑.
 
 ※ 첫 줄 헤더를 데이터로 넣지 않게끔 정리.
@@ -231,7 +233,7 @@ docker run -d -p 6379:6379 --name redis-container redis:latest
 - dir, limit를 yml에 받아온 다음 CommandLineRunner 메서드 run() 상속, SeedService.seedAll() 호출.
 3. SeedService
 
-![image.png](attachment:3bbafea8-2f1a-4b79-8f06-7b4fa22a6080:image.png)
+<img width="342" height="87" alt="image" src="https://github.com/user-attachments/assets/385e877b-a5a3-41a4-84e4-4e27372fe877" />
 
 - seedAll() : 흐름 제어(Orchestration)
 - 본 테이블 채우기 : private helper method
