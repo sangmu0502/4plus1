@@ -210,7 +210,6 @@ docker run -d -p 6379:6379 --name redis-container redis:latest
 
 ---
 
-상무님/진수님은 본인이 작성한 ppt내용 참고
 
 ### 1) DataSet을 Local DB에 넣기까지의 과정 (진수님)
 
@@ -221,6 +220,8 @@ docker run -d -p 6379:6379 --name redis-container redis:latest
     
 - dir : 해당 디렉터리 경로
 - limit : 데이터 삽입 숫자.
+
+  
 1. Csvs.java
 
 - open() : 첫 줄 헤더를 컬럼 명으로 매핑.
@@ -229,8 +230,12 @@ docker run -d -p 6379:6379 --name redis-container redis:latest
 
 - bomAwareReader : 첫 세 바이트(byte sequence)가 UTF-8 BOM → 읽지 않고 넘기기. 맞다면 되감기.
 - overLimit : limit = 0 : 무제한.
+
+  
 2. SeedRunner
 - dir, limit를 yml에 받아온 다음 CommandLineRunner 메서드 run() 상속, SeedService.seedAll() 호출.
+
+
 3. SeedService
 
 <img width="763" height="683" alt="image" src="https://github.com/user-attachments/assets/a254be3f-8436-4ea9-a6b4-a79ab130ce3b" />
@@ -243,6 +248,8 @@ docker run -d -p 6379:6379 --name redis-container redis:latest
 - → 각 테이블 별 row에서 id, externalId 매핑 : Repository  → ID Map
 - → 조인 테이블 저장 : extract → map으로 PK 찾기 → getReference → persist로 적재.
 - 간단한 정규화 : parseReleaseDateOrNull() : ‘-’ 단위 구분 후 LocalDate 객체 만들어서 반환.
+
+  
 4. Repository
 - IdRow : Entity 전체가 아닌, externalId, id row만 적재.
 - loadIdMap() : 엔트리가 늘 경우, 내부 배열이 증가하면서 재해시 비용 지불.
