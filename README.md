@@ -47,13 +47,24 @@
 - JWT 0.13.0
 - MySQL 8.4
 - Docker 29.1.2
-- QueryDSL
+- QueryDSL 5.0.0
+- ElasticSearch 8.12.2
+- redis 7.4.7
+- csv 1.10.0
 
 <br>
 
 ## 4. 데이터셋 추가
 
-…
+<img width="689" height="33" alt="image" src="https://github.com/user-attachments/assets/d2c4fcfc-1f8a-4733-b5d7-ac4562d1d8e5" />
+### i. git clone -b search-tjs --single-branch https://github.com/sangmu0502/4plus1.git
+
+<img width="327" height="589" alt="image" src="https://github.com/user-attachments/assets/dd5b7273-0ecf-4dff-905c-40b5784ab428" />
+<img width="802" height="693" alt="image" src="https://github.com/user-attachments/assets/70716265-2d73-40d6-8cef-b9fde02b16cf" />
+### ii. Alt + U + R -> 활성화된 프로파일 : seed 입력
+
+### iii. ./gradlew bootRun
+
 
 <br>
 
