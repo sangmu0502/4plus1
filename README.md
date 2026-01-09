@@ -233,7 +233,7 @@ docker run -d -p 6379:6379 --name redis-container redis:latest
 - dir, limit를 yml에 받아온 다음 CommandLineRunner 메서드 run() 상속, SeedService.seedAll() 호출.
 3. SeedService
 
-<img width="342" height="87" alt="image" src="https://github.com/user-attachments/assets/385e877b-a5a3-41a4-84e4-4e27372fe877" />
+<img width="763" height="683" alt="image" src="https://github.com/user-attachments/assets/a254be3f-8436-4ea9-a6b4-a79ab130ce3b" />
 
 - seedAll() : 흐름 제어(Orchestration)
 - 본 테이블 채우기 : private helper method
