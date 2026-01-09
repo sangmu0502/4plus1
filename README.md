@@ -325,7 +325,46 @@ ORDER BY 기반 조회의 성능 한계를 해결하기 위해 다음과 같은 
 
 ORDER BY 기반 실시간 정렬 조회는 데이터 규모와 트래픽 증가에 취약하며, 사전 계산 및 캐시 구조를 도입함으로써 시스템 확장성과 성능을 크게 개선할 수 있었다.
 
-### 3) Redis (서연님)
+### 3) 플레이리스트 곡 목록 조회 Redis 사용
+#### 1️⃣ 첫 페이지 캐시 구조 도입
+
+- 플레이리스트 조회 중 0페이지를 Redis에 응답 결과를 캐싱
+- 첫 페이지( 0 page )가 가장 많이 조회
+- 플레이리스트 첫 페이지는 조회 빈도가 높고 변경 빈도가 낮음 → Cache 사용에 유리
+
+#### 2️⃣ Cache-Aside 패턴 적용
+
+- 요청 시:
+    1. Redis 캐시 조회
+    2. 캐시 존재 → Redis에서 즉시 반환
+    3. 캐시 미존재 → DB 조회 후 Redis 저장
+
+#### 3️⃣ 쓰기 시 캐시 무효화
+
+- 곡 추가 / 삭제 시 해당 플레이리스트의 0페이지 캐시 삭제
+
+#### 4️⃣부하 테스트
+
+- V1: Redis 미사용(DB 직접 조회)
+- V2: Redis 캐시 사용
+
+---
+
+#### Redis X
+
+<img width="1478" height="656" alt="image" src="https://github.com/user-attachments/assets/9303dc90-458b-4c92-869e-1429f6e5b414" />
+
+평균 응답 시간: 394ms
+P95 응답 시간: 453ms
+
+#### Redis O
+
+<img width="1538" height="675" alt="image" src="https://github.com/user-attachments/assets/550eb909-2439-452e-8a12-3d058c31092a" />
+
+
+평균 응답 시간: 15ms
+P95 응답 시간: 44ms
+
 
 ### 4) Indexing (동&정)
 
