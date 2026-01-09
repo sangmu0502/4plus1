@@ -94,13 +94,32 @@ docker run -d -p 6379:6379 --name redis-container redis:latest
 
 <br>
 
+### i. ElasticSearch 설정
+`docker compose up -d`
+
+### ii. 실행 
+`./gradlew bootRun`
+
+### iii. 색인 설정
+#### docker, app 기동 시,
+##### POST : 색인 생성(reindex)
+`http://localhost:8080/api/admin/reindex/songs?batch=1000`<br>
+`http://localhost:8080/api/admin/reindex/albums?batch=1000`<br>
+`http://localhost:8080/api/admin/reindex/artists?batch=1000`<br>
+
+##### DELETE : 색인 삭제
+`http://localhost:9200/songs?ignore_unavailable=true`<br>
+`http://localhost:9200/albums?ignore_unavailable=true`<br>
+`http://localhost:9200/artists?ignore_unavailable=true`<br>
+
+<br>
+
 ## 6. WireFrame + ERD
 
 <img width="909" height="810" alt="image" src="https://github.com/user-attachments/assets/38c7a201-5aba-4477-9f85-ce8973a77995" />
 
 <img width="1840" height="831" alt="ERD최종" src="https://github.com/user-attachments/assets/18174fe3-3b87-4707-8e1f-6fdca7aa5a41" />
 
-<br>
 
 ## 7. 주요 기능
 
