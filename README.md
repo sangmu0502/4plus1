@@ -51,6 +51,7 @@
 - ElasticSearch 8.12.2
 - redis 7.4.7
 - csv 1.10.0
+- caffeine 3.2.2
 
 <br>
 
@@ -185,7 +186,11 @@ docker run -d -p 6379:6379 --name redis-container redis:latest
 
 - 기본 경로: `/api/search`
 
-* **GET** `기본 경로` : 통합 검색
+* **GET** `기본 경로` : 페이지 통합 검색
+* **GET** `/cache` : 캐시 적용 페이지 통합 검색
+* **GET** `/slice` : 슬라이스 통합 검색
+* **GET** `/slice/cache` : 슬라이스 캐시 통합검색
+* **GET** `/es` : ElasticSearch 통합 검색
 * **GET** `/popular` : 인기 검색어 조회
 </details>
 
