@@ -458,11 +458,15 @@ LIMIT 100;
 
 <img width="880" height="270" alt="스크린샷 2026-01-09 11 12 09" src="https://github.com/user-attachments/assets/ef9c706e-5595-403e-88a0-f1c8bc4e85df" />
 
+**5️⃣ 쿼리 최적화(Indexing) 보고서**<br>
+
+- [쿼리 최적화(Indexing)](https://docs.google.com/document/d/1ScnCH7y9UISZGxcQoYNZx2Vg9pYTNUpbGSZVTMO-3kw/edit?tab=t.0)
+
 <br>
 
 ## 10. 마치며
 
-[ppt 링크](https://www.canva.com/design/DAG9zTXiQRw/AYF-984bvg368r9vemWnew/edit?utm_content=DAG9zTXiQRw&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
+- [ppt 링크](https://www.canva.com/design/DAG9zTXiQRw/AYF-984bvg368r9vemWnew/edit?utm_content=DAG9zTXiQRw&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
 
 ### Spring plus 팀 프로젝트
 - 이상무 : https://github.com/sangmu0502
