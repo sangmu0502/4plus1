@@ -57,13 +57,16 @@
 ## 4. 데이터셋 추가
 
 <br><img width="689" height="33" alt="image" src="https://github.com/user-attachments/assets/d2c4fcfc-1f8a-4733-b5d7-ac4562d1d8e5" /></br>
-### i. git clone -b search-tjs --single-branch https://github.com/sangmu0502/4plus1.git
+### i. Clone 
+`git clone -b search-tjs --single-branch https://github.com/sangmu0502/4plus1.git`
 
 <br><img width="327" height="589" alt="image" src="https://github.com/user-attachments/assets/dd5b7273-0ecf-4dff-905c-40b5784ab428" /></br>
 <br><img width="802" height="693" alt="image" src="https://github.com/user-attachments/assets/70716265-2d73-40d6-8cef-b9fde02b16cf" /></br>
-### ii. Alt + U + R -> 활성화된 프로파일 : seed 입력
+### ii. Alt + U + R -> 활성화된 프로파일
+`seed` 입력
 
-### iii. ./gradlew bootRun
+### iii. 실행
+`./gradlew bootRun`
 
 
 <br>
