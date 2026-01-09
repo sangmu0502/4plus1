@@ -1,5 +1,3 @@
-
-
 # 🎵 Sparta Music API
 
 ## 0. 목차
@@ -27,9 +25,9 @@
 
 ## 2. 프로젝트 개요
 
-본 프로젝트는 멜론에서 제공하는 약 70만 건의 음악 메타데이터셋을 가공하여 구축한 사용자 검색 기반 음악 스트리밍 웹 서비스입니다.
+본 프로젝트는 멜론에서 제공하는 약 70만 건의 음악 메타 데이터셋을 가공하여 구축한 사용자 검색 기반 음악 스트리밍 웹 서비스
 
-음악 차트 서비스의 백엔드 API 서버를 중심으로 설계되었으며 음악 검색, 차트 제공까지 스트리밍 서비스에 필요한 핵심 기능들을 구현하였습니다.
+음악 차트 서비스의 백엔드 API 서버를 중심으로 설계되었으며 음악 검색, 차트 제공까지 스트리밍 서비스에 필요한 핵심 기능들을 구현함
 
 **[ 프로젝트 목적 ]**
 
@@ -51,22 +49,22 @@
 - ElasticSearch 8.12.2
 - redis 7.4.7
 - csv 1.10.0
-- caffeine 3.2.2
 
 <br>
 
 ## 4. 데이터셋 추가
 
-<br><img width="689" height="33" alt="image" src="https://github.com/user-attachments/assets/d2c4fcfc-1f8a-4733-b5d7-ac4562d1d8e5" /></br>
-### i. Clone 
+### 1) Clone 
 `git clone -b search-tjs --single-branch https://github.com/sangmu0502/4plus1.git`
 
-<br><img width="327" height="589" alt="image" src="https://github.com/user-attachments/assets/dd5b7273-0ecf-4dff-905c-40b5784ab428" /></br>
-<br><img width="802" height="693" alt="image" src="https://github.com/user-attachments/assets/70716265-2d73-40d6-8cef-b9fde02b16cf" /></br>
-### ii. Alt + U + R -> 활성화된 프로파일
+
+### 2) 실행 -> 구성편집 -> 활성화된 프로파일
+
+<img width="4244" height="2475" alt="그림2" src="https://github.com/user-attachments/assets/dfaea27b-b7ee-43d6-accc-f623428cba6f" />
+
 `seed` 입력
 
-### iii. 실행
+### 3) 실행
 `./gradlew bootRun`
 
 
@@ -74,44 +72,26 @@
 
 ## 5. 실행 환경
 
-### i. Redis 실행
+### 1) Redis 실행
 
 Docker로 redis 띄우기
 
-```json
+```
 docker pull redis:latest
 docker run -d -p 6379:6379 --name redis-container redis:latest
 ```
 
-### ii. Indexing
+### 2) Indexing
 
+```
 메인 패키지에 포함된 .sql 파일이 애플리케이션 실행 시 자동 수행되도록 구성되어 있어 추가적인 설정 없이 서버 실행만으로 처리 가능
-
-### iii. Application 실행
-
-```json
-./gradlew bootRun
 ```
 
-<br>
+### 3) Application 실행
 
-### i. ElasticSearch 설정
-`docker compose up -d`
-
-### ii. 실행 
-`./gradlew bootRun`
-
-### iii. 색인 설정
-#### docker, app 기동 시,
-##### POST : 색인 생성(reindex)
-`http://localhost:8080/api/admin/reindex/songs?batch=1000`<br>
-`http://localhost:8080/api/admin/reindex/albums?batch=1000`<br>
-`http://localhost:8080/api/admin/reindex/artists?batch=1000`<br>
-
-##### DELETE : 색인 삭제
-`http://localhost:9200/songs?ignore_unavailable=true`<br>
-`http://localhost:9200/albums?ignore_unavailable=true`<br>
-`http://localhost:9200/artists?ignore_unavailable=true`<br>
+```
+ ./gradlew bootRun
+```
 
 <br>
 
@@ -121,6 +101,7 @@ docker run -d -p 6379:6379 --name redis-container redis:latest
 
 <img width="1840" height="831" alt="ERD최종" src="https://github.com/user-attachments/assets/18174fe3-3b87-4707-8e1f-6fdca7aa5a41" />
 
+<br>
 
 ## 7. 주요 기능
 
@@ -223,24 +204,23 @@ docker run -d -p 6379:6379 --name redis-container redis:latest
 **1️⃣ application.seed.yml**
 
 <img width="342" height="87" alt="image" src="https://github.com/user-attachments/assets/4d43f2fc-43a9-4573-8307-05694481d1f0" />
-
     
 - dir : 해당 디렉터리 경로
-- limit : 데이터 삽입 숫자.
+- limit : 데이터 삽입 숫자
 
   
 **2️⃣ Csvs.java**
 
-- open() : 첫 줄 헤더를 컬럼 명으로 매핑.
+- open() : 첫 줄 헤더를 컬럼 명으로 매핑
 
-※ 첫 줄 헤더를 데이터로 넣지 않게끔 정리.
+※ 첫 줄 헤더를 데이터로 넣지 않게끔 정리
 
-- bomAwareReader : 첫 세 바이트(byte sequence)가 UTF-8 BOM → 읽지 않고 넘기기. 맞다면 되감기.
-- overLimit : limit = 0 : 무제한.
+- bomAwareReader : 첫 세 바이트(byte sequence)가 UTF-8 BOM → 읽지 않고 넘기기 / 맞다면 되감기
+- overLimit : limit = 0 : 무제한
 
   
 **3️⃣ SeedRunner**
-- dir, limit를 yml에 받아온 다음 CommandLineRunner 메서드 run() 상속, SeedService.seedAll() 호출.
+- dir, limit를 yml에 받아온 다음 CommandLineRunner 메서드 run() 상속, SeedService.seedAll() 호출
 
 
 **4️⃣ SeedService**
@@ -253,17 +233,17 @@ docker run -d -p 6379:6379 --name redis-container redis:latest
 ※ ex). seedSongs(), seedAlbums()
 
 - → 각 테이블 별 row에서 id, externalId 매핑 : Repository  → ID Map
-- → 조인 테이블 저장 : extract → map으로 PK 찾기 → getReference → persist로 적재.
-- 간단한 정규화 : parseReleaseDateOrNull() : ‘-’ 단위 구분 후 LocalDate 객체 만들어서 반환.
+- → 조인 테이블 저장 : extract → map으로 PK 찾기 → getReference → persist로 적재
+- 간단한 정규화 : parseReleaseDateOrNull() : ‘-’ 단위 구분 후 LocalDate 객체 만들어서 반환
 
   
 **5️⃣ Repository**
-- IdRow : Entity 전체가 아닌, externalId, id row만 적재.
-- loadIdMap() : 엔트리가 늘 경우, 내부 배열이 증가하면서 재해시 비용 지불.
+- IdRow : Entity 전체가 아닌, externalId, id row만 적재
+- loadIdMap() : 엔트리가 늘 경우, 내부 배열이 증가하면서 재해시 비용 지불
 
 ※ 기본 load factor : 0.75 
 
-→ N개를 넣을 경우, N / 0.75로 잡기 → 중간 resize 소요 없이 한 번에 적재.
+→ N개를 넣을 경우, N / 0.75로 잡기 → 중간 resize 소요 없이 한 번에 적재
 
 <br>
 
@@ -274,7 +254,7 @@ docker run -d -p 6379:6379 --name redis-container redis:latest
 ### 2) Redis
 **1️⃣ 문제 원인**
 
-기존 V1 API는 인기 곡 목록을 조회하기 위해 **DB에서 `ORDER BY` 절을 사용한 정렬 쿼리**를 수행하고 있었다.
+- 기존 V1 API는 인기 곡 목록을 조회하기 위해 **DB에서 `ORDER BY` 절을 사용한 정렬 쿼리**를 수행하고 있었음
 
 ```jsx
 SELECT ...
@@ -283,9 +263,9 @@ ORDER BY play_count DESC
 LIMIT 100;
 ```
 
-이 방식은 데이터 양이 적을 때는 문제가 없으나, 데이터가 증가할수록 다음과 같은 구조적 한계를 가진다.
+- 이 방식은 데이터 양이 적을 때는 문제가 없으나, 데이터가 증가할수록 다음과 같은 구조적 한계를 가짐
 
-#### ❗ ORDER BY 기반 조회의 문제점
+**[❗ ORDER BY 기반 조회의 문제점 ]**
 
 1. 정렬 비용 증가
     1. `ORDER BY`는 DB 내부에서 정렬 연산을 수행
@@ -296,14 +276,12 @@ LIMIT 100;
         1. 동일한 정렬 쿼리가 반복 실행
         2. DB에 부하가 순간적으로 집중됨
 
-이로 인해 트래픽이 증가할수록 **DB가 병목 지점(Bottleneck)**이 되었고,
-
-부하 테스트 환경에서는 **DB 스파이크 현상**으로 이어졌다.
+- 이로 인해 트래픽이 증가할수록 **DB가 병목 지점(Bottleneck)**이 되었고, 부하 테스트 환경에서는 **DB 스파이크 현상**으로 이어짐
 
 
 **2️⃣ 기술 도입**
 
-ORDER BY 기반 조회의 성능 한계를 해결하기 위해 다음과 같은 구조 개선을 진행하였다.
+- ORDER BY 기반 조회의 성능 한계를 해결하기 위해 다음과 같은 구조 개선 진행
 
 1. 정렬 결과 사전 계산 구조 도입
 
@@ -314,8 +292,8 @@ ORDER BY 기반 조회의 성능 한계를 해결하기 위해 다음과 같은 
 
 2. 캐시 기반 조회 구조 (V2)
 
-- 조회 요청 시 DB 정렬 수행 ❌
-- 캐시(Redis 등)에 저장된 정렬 결과를 바로 응답 ⭕
+- 조회 요청 시 DB 정렬 수행 X
+- 캐시(Redis 등)에 저장된 정렬 결과를 바로 응답 O
 
 3. 동일 조건 부하 테스트 수행
 
@@ -324,7 +302,7 @@ ORDER BY 기반 조회의 성능 한계를 해결하기 위해 다음과 같은 
     - V1: ORDER BY 실시간 정렬
     - V2: 사전 계산 + 캐시 조회
 
-이를 통해 구조 변경에 따른 성능 차이를 명확히 검증하였다.
+- 이를 통해 구조 변경에 따른 성능 차이를 명확히 검증
 
 
 **3️⃣ 도입 전후 비교**
@@ -363,17 +341,15 @@ ORDER BY 기반 조회의 성능 한계를 해결하기 위해 다음과 같은 
 
 **5️⃣ 결론**
 
-프로젝트에서는 **ORDER BY 기반 실시간 정렬 조회가 고트래픽 환경에서 성능 병목을 유발**함을 확인하였다.
+- 프로젝트에서는 **ORDER BY 기반 실시간 정렬 조회가 고트래픽 환경에서 성능 병목을 유발**함을 확인함
 
-정렬 결과를 사전에 계산하고 캐시 기반으로 조회하는 구조로 개선함으로써,
+- 정렬 결과를 사전에 계산하고 캐시 기반으로 조회하는 구조로 개선함으로써 다음의 성능 개선 효과를 달성함
 
-- DB 부하 제거
-- 응답 시간 안정화
-- 대량 트래픽 환경에서도 일관된 성능 유지
+    - DB 부하 제거
+    - 응답 시간 안정화
+    - 대량 트래픽 환경에서도 일관된 성능 유지
 
-라는 성능 개선 효과를 달성하였다.
-
-ORDER BY 기반 실시간 정렬 조회는 데이터 규모와 트래픽 증가에 취약하며, 사전 계산 및 캐시 구조를 도입함으로써 시스템 확장성과 성능을 크게 개선할 수 있었다.
+- ORDER BY 기반 실시간 정렬 조회는 데이터 규모와 트래픽 증가에 취약하며, 사전 계산 및 캐시 구조를 도입함으로써 시스템 확장성과 성능을 크게 개선할 수 있었음
 
 <br>
 
@@ -426,7 +402,9 @@ ORDER BY 기반 실시간 정렬 조회는 데이터 규모와 트래픽 증가�
 
 **1️⃣ 문제 원인**
 
-[ 이미지 첨부 ]
+<img width="989" height="552" alt="스크린샷 2026-01-09 112035" src="https://github.com/user-attachments/assets/a6999a05-cea1-41c1-972f-8f436bf2a390" />
+
+<img width="4212" height="2438" alt="그림1" src="https://github.com/user-attachments/assets/226cd1a7-32a5-47f7-be95-a14a86360416" />
 
 - **풀 테이블 스캔 발생**: `genre_code`가 문자열(String) 컬럼임에도 인덱스가 없어, 장르별 검색 시 MySQL이 `genres` 테이블 전체를 스캔함
 - **중간 테이블 조인 병목**: 곡(Song)과 장르(Genre)를 연결하는 `song_genre` 테이블의 데이터가 방대해짐에 따라, 조인 및 존재 여부 확인(`exists`) 쿼리에서 I/O 부하 발생
