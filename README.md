@@ -214,8 +214,40 @@ docker run -d -p 6379:6379 --name redis-container redis:latest
 
 ### 1) DataSet을 Local DB에 넣기까지의 과정 (진수님)
 
-1. 멜론 데이터셋을 우리의 ERD에 맞게 Python코드로 CSV파일 7개로 추출 (이부분 코드를 첨부하고 싶다면 상무님에게 상담)
-2. CSV파일을 Local DB에 넣는 과정 설명
+0. application.seed.yml
+    
+    ![image.png](attachment:1ad0c89d-c0f0-4217-8faa-a08372e6d41e:image.png)
+    
+- dir : 해당 디렉터리 경로
+- limit : 데이터 삽입 숫자.
+1. Csvs.java
+- open() : 첫 줄 헤더를 컬럼 명으로 매핑.
+
+※ 첫 줄 헤더를 데이터로 넣지 않게끔 정리.
+
+- bomAwareReader : 첫 세 바이트(byte sequence)가 UTF-8 BOM → 읽지 않고 넘기기. 맞다면 되감기.
+- overLimit : limit = 0 : 무제한.
+2. SeedRunner
+- dir, limit를 yml에 받아온 다음 CommandLineRunner 메서드 run() 상속, SeedService.seedAll() 호출.
+3. SeedService
+
+![image.png](attachment:3bbafea8-2f1a-4b79-8f06-7b4fa22a6080:image.png)
+
+- seedAll() : 흐름 제어(Orchestration)
+- 본 테이블 채우기 : private helper method
+
+※ ex). seedSongs(), seedAlbums()
+
+- → 각 테이블 별 row에서 id, externalId 매핑 : Repository  → ID Map
+- → 조인 테이블 저장 : extract → map으로 PK 찾기 → getReference → persist로 적재.
+- 간단한 정규화 : parseReleaseDateOrNull() : ‘-’ 단위 구분 후 LocalDate 객체 만들어서 반환.
+4. Repository
+- IdRow : Entity 전체가 아닌, externalId, id row만 적재.
+- loadIdMap() : 엔트리가 늘 경우, 내부 배열이 증가하면서 재해시 비용 지불.
+
+※ 기본 load factor : 0.75 
+
+→ N개를 넣을 경우, N / 0.75로 잡기 → 중간 resize 소요 없이 한 번에 적재.
 
 ### 2) Redis (상무님)
 # 1. 문제 원인
