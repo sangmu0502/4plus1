@@ -93,6 +93,29 @@ docker run -d -p 6379:6379 --name redis-container redis:latest
  ./gradlew bootRun
 ```
 
+
+### 4) ElasticSearch 실행 설정
+
+**i. docker 실행** 
+
+`docker compose up -d`
+
+**ii. application 실행** 
+
+`./gradlew bootRun`
+
+**iii. 색인 설정**<br>
+docker, application 기동 시
+- POST : 색인 생성(reindex)<br>
+`http://localhost:8080/api/admin/reindex/songs?batch=1000`<br>
+`http://localhost:8080/api/admin/reindex/albums?batch=1000`<br>
+`http://localhost:8080/api/admin/reindex/artists?batch=1000`<br>
+
+- DELETE : 색인 삭제<br>
+`http://localhost:9200/songs?ignore_unavailable=true`<br>
+`http://localhost:9200/albums?ignore_unavailable=true`<br>
+`http://localhost:9200/artists?ignore_unavailable=true`<br>
+
 <br>
 
 ## 6. WireFrame + ERD
@@ -209,7 +232,7 @@ docker run -d -p 6379:6379 --name redis-container redis:latest
 - limit : 데이터 삽입 숫자
 
   
-**2️⃣ Csvs.java**
+**2️⃣ CsvList.java**
 
 - open() : 첫 줄 헤더를 컬럼 명으로 매핑
 
@@ -251,7 +274,7 @@ docker run -d -p 6379:6379 --name redis-container redis:latest
 
 <br>
 
-### 2) Redis
+### 2) TOP 10 노래 조회 Redis 사용
 **1️⃣ 문제 원인**
 
 - 기존 V1 API는 인기 곡 목록을 조회하기 위해 **DB에서 `ORDER BY` 절을 사용한 정렬 쿼리**를 수행하고 있었음
